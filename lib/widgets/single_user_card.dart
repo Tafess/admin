@@ -50,34 +50,34 @@ class _SingleUserCardState extends State<SingleUserCard> {
               ],
             ),
             const Spacer(),
-            isloading
-                ? const CircularProgressIndicator()
-                : GestureDetector(
-                    onLongPress: () async {
-                      setState(() {
-                        isloading = true;
-                      });
-                      await appProvider
-                          .deleteUserFromFirebase(widget.userModel);
-                      setState(() {
-                        isloading = false;
-                      });
-                    },
-                    child: const Icon(
-                      Icons.delete,
-                      color: Colors.red,
-                    )),
-            const SizedBox(width: 10),
-            GestureDetector(
-                onTap: () {
-                  Routes.instance.push(
-                      widget: EditUser(
-                        userModel: widget.userModel,
-                        index: widget.index,
-                      ),
-                      context: context);
-                },
-                child: const Icon(Icons.edit))
+            // isloading
+            //     ? const CircularProgressIndicator()
+            //     : GestureDetector(
+            //         onLongPress: () async {
+            //           setState(() {
+            //             isloading = true;
+            //           });
+            //           await appProvider
+            //               .deleteUserFromFirebase(widget.userModel);
+            //           setState(() {
+            //             isloading = false;
+            //           });
+            //         },
+            //         child: const Icon(
+            //           Icons.delete,
+            //           color: Colors.red,
+            //         )),
+            // const SizedBox(width: 10),
+            // GestureDetector(
+            //     onTap: () {
+            //       Routes.instance.push(
+            //           widget: EditUser(
+            //             userModel: widget.userModel,
+            //             index: widget.index,
+            //           ),
+            //           context: context);
+            //     },
+            //     child: const Icon(Icons.edit))
           ],
         ),
       ),

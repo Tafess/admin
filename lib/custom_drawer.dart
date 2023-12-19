@@ -2,11 +2,12 @@
 
 import 'package:admin/constants/routes.dart';
 import 'package:admin/screens/category_view.dart';
-import 'package:admin/screens/completed_order_list.dart';
-import 'package:admin/screens/home_page.dart';
+import 'package:admin/screens/order_list.dart';
+import 'package:admin/screens/dashboard_screen.dart';
 import 'package:admin/screens/product_view.dart';
 import 'package:admin/screens/user_view.dart';
 import 'package:flutter/material.dart';
+import 'package:side_bar_custom/side_bar_custom.dart';
 
 class CustomDrawer extends StatefulWidget {
   @override
@@ -15,139 +16,75 @@ class CustomDrawer extends StatefulWidget {
 // ... (previous code)
 
 class _CustomDrawerState extends State<CustomDrawer> {
-  bool showTitles = true;
+  final pages = const [
+    Dashboard(),
+    CategoryViewScreen(),
+    ProductView(),
+    UserViewScreen(),
+    UserViewScreen(),
+    UserViewScreen(),
+    OrderListView(title: 'All')
+  ];
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.topLeft,
-      children: [
-        Drawer(
-          child: Column(
-            children: [
-              Container(
-                height: 70,
-                width: 250,
-                color: Colors.white,
-                child: DrawerHeader(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                  ),
-                  child: Row(
-                    children: [
-                      IconButton(
-                        icon: Icon(Icons.menu),
-                        onPressed: () {
-                          setState(() {
-                            showTitles = !showTitles;
-                          });
-                        },
-                        color: Colors.black,
-                      ),
-                      //  if (showTitles)
-                      Text(
-                        'Dashboard',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 18,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Expanded(
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    final drawerWidth = constraints.maxWidth;
-
-                    return Align(
-                      alignment: Alignment.topLeft,
-                      child: Container(
-                        color: Colors.black12,
-                        width: showTitles ? 250 : 50,
-                        child: ListView.builder(
-                          padding: EdgeInsets.zero,
-                          itemCount: drawerItems.length,
-                          itemBuilder: (context, index) {
-                            return ListTile(
-                              leading: Icon(drawerItems[index].icon),
-                              title: showTitles
-                                  ? Text(
-                                      drawerItems[index].title,
-                                      style: TextStyle(fontSize: 14),
-                                    )
-                                  : null,
-                              onTap: () {
-                                Routes.instance.push(
-                                  widget: drawerItems[index].widget,
-                                  context: context,
-                                );
-                              },
-                            );
-                          },
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.green,
+        title: Row(children: [
+          IconButton(
+              onPressed: () {}, icon: Icon(Icons.menu, color: Colors.white)),
+          SizedBox(width: 10),
+          Text('Dashboard'),
+        ]),
+      ),
+      body: SideBar(
+        children: pages,
+        items: [
+          SideBarItem(
+            text: "Dashboard",
+            icon: Icons.home,
+            tooltipText: "Dashboard page",
           ),
-        ),
-      ],
+          SideBarItem(
+            text: "Categories",
+            icon: Icons.category,
+          ),
+          SideBarItem(
+            text: "Products",
+            icon: Icons.shop_2,
+          ),
+          SideBarItem(
+            text: "Sellers",
+            icon: Icons.group,
+          ),
+          SideBarItem(
+            text: "Delivery",
+            icon: Icons.delivery_dining,
+          ),
+          SideBarItem(
+            text: "Customers",
+            icon: Icons.person,
+          ),
+          SideBarItem(
+            text: "Orders",
+            icon: Icons.circle,
+          ),
+        ],
+        config: SideBarConfig(
+            enablePageView: true,
+            backgroundColor: Colors.grey.shade200,
+            selectedIconColor: Colors.green,
+            unselectedBoxColor: Colors.white,
+            selectedBoxColor: Colors.white,
+            unselectedIconColor: Colors.grey,
+            unselectedTextStyle: TextStyle(fontWeight: FontWeight.normal),
+            dividerColor: Colors.black,
+            iconSize: 30
+            // sideBarAnimationDuration: Duration(seconds: 1),
+            // sideBarCurve: Curves.bounceInOut
+            ),
+      ),
     );
   }
 }
-
-// ... (rest of the code)
-
-class DrawerItem {
-  final String title;
-  final IconData icon;
-  final Widget widget;
-
-  DrawerItem({
-    required this.title,
-    required this.icon,
-    required this.widget,
-  });
-}
-
-List<DrawerItem> drawerItems = [
-  DrawerItem(
-    title: 'Dashboard',
-    icon: Icons.home,
-    widget: HomePage(),
-  ),
-  DrawerItem(
-    title: 'Categories',
-    icon: Icons.category,
-    widget: CategoryViewScreen(),
-  ),
-  DrawerItem(
-    title: 'Products',
-    icon: Icons.sell,
-    widget: ProductView(),
-  ),
-  DrawerItem(
-    title: 'Sellers',
-    icon: Icons.group,
-    widget: CategoryViewScreen(),
-  ),
-  DrawerItem(
-    title: 'Buyers',
-    icon: Icons.shop,
-    widget: UserViewScreen(),
-  ),
-  DrawerItem(
-    title: 'Orders',
-    icon: Icons.circle,
-    widget: OrderListView(title: 'Completed'),
-  ),
-  DrawerItem(
-    title: 'Delivery',
-    icon: Icons.delivery_dining,
-    widget: OrderListView(title: 'Completed'),
-  ),
-];

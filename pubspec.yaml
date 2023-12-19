@@ -40,10 +40,15 @@ dependencies:
   http: ^1.1.0
   firebase_storage: ^11.5.2
   cloud_firestore: ^4.13.2
-  image_picker: ^1.0.4
+  image_picker: ^1.0.5
+  image_picker_web: ^3.1.1
   firebase_auth: ^4.14.1
   flutter_admin_scaffold: ^1.2.0
   date_time_format: ^2.0.1
+  side_bar_custom: ^1.0.3
+  flutter_web_data_table: ^1.0.0
+  sidebarx: ^0.16.3
+  file_picker: ^6.1.1
 
 dev_dependencies:
   flutter_test:
@@ -67,8 +72,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
+  assets:
+    - assets/images/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, prefer_const_constructors, unused_import
 
 import 'dart:io';
 
@@ -11,7 +11,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-
 
 class EditUser extends StatefulWidget {
   final UserModel userModel;
@@ -70,32 +69,7 @@ class _EditUserState extends State<EditUser> {
                 hintText: widget.userModel.name),
           ),
           const SizedBox(height: 20),
-          SizedBox(
-              child: PrimaryButton(
-                  onPressed: () async {
-                    if (image == null && name.text.isEmpty) {
-                      Navigator.of(context).pop();
-                    } else if (image != null) {
-                      String imageUrl = await FirebaseStorageHelper.instance
-                          .uploadUserImage(widget.userModel.id, image!);
-                      UserModel userModel = widget.userModel.copyWith(
-                        image: imageUrl,
-                        name: name.text.isEmpty ? null : name.text,
-                      );
-                      appProvider.updateUserList(widget.index, userModel);
-                      showMessage('user successfuly updated');
-                    } else {
-                      UserModel userModel = widget.userModel.copyWith(
-                        name: name.text.isEmpty ? null : name.text,
-                      );
-                      appProvider.updateUserList(widget.index, userModel);
-                      showMessage('user successfuly updated');
-                    }
-                    Navigator.of(context).pop();
-                    //   appProvider.updateUserInfoFirebase(
-                    //   context, userModel, image);
-                  },
-                  title: 'Update'))
+          SizedBox()
         ],
       ),
     );

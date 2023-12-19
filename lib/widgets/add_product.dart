@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously, prefer_const_constructors
+// ignore_for_file: use_build_context_synchronously, prefer_const_constructors, unused_import
 
 import 'dart:io';
 
@@ -10,7 +10,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-
 
 class AddProduct extends StatefulWidget {
   const AddProduct({
@@ -122,37 +121,38 @@ class _AddProductState extends State<AddProduct> {
           ),
           const SizedBox(height: 20),
           SizedBox(
-              child: PrimaryButton(
-                  onPressed: () async {
-                    if (image == null ||
-                        _selectedCategory == null ||
-                        name.text.isEmpty ||
-                        description.text.isEmpty ||
-                        price.text.isEmpty) {
-                      showMessage('Please Enter values');
-                    } else if (image != null) {
-                      appProvider.addProduct(
-                        image!,
-                        name.text,
-                        description.text,
-                        _selectedCategory!.id,
-                        price.text.toString(),
-                      );
-                      showMessage('Product successfully Added');
-                      setState(() {
-                        image = null;
-                        name.clear();
-                        description.clear();
-                        _selectedCategory = null;
-                        price.clear();
-                      });
-                    }
+        //       child: PrimaryButton(
+        //           onPressed: () async {
+        //             if (image == null ||
+        //                 _selectedCategory == null ||
+        //                 name.text.isEmpty ||
+        //                 description.text.isEmpty ||
+        //                 price.text.isEmpty) {
+        //               showMessage('Please Enter values');
+        //             } else if (image != null) {
+        //               appProvider.addProduct(
+        //                 image!,
+        //                 name.text,
+        //                 description.text,
+        //                 _selectedCategory!.id,
+        //                 price.text.toString(),
+        //                 price.text.toString(),
+        //               );
+        //               showMessage('Product successfully Added');
+        //               setState(() {
+        //                 image = null;
+        //                 name.clear();
+        //                 description.clear();
+        //                 _selectedCategory = null;
+        //                 price.clear();
+        //               });
+        //             }
 
-                    //   appProvider.updateUserInfoFirebase(
-                    //   context, userModel, image);
-                  },
-                  title: 'Add'))
-        ],
+        //             //   appProvider.updateUserInfoFirebase(
+        //             //   context, userModel, image);
+        //           },
+        //           title: 'Add'))
+       ) ],
       ),
     );
   }

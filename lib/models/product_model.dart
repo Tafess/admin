@@ -7,6 +7,7 @@ class ProductModel {
   String image;
   String name;
   double price;
+  double discount;
   String status;
   bool isFavorite;
   int quantity;
@@ -18,6 +19,7 @@ class ProductModel {
     required this.image,
     required this.name,
     required this.price,
+    required this.discount,
     required this.status,
     required this.isFavorite,
     required this.quantity,
@@ -31,6 +33,7 @@ class ProductModel {
       image: json['image'] ?? '',
       name: json['name'] ?? '',
       price: (json['price'] as num?)?.toDouble() ?? 0.0,
+      discount: (json['discount'] as num?)?.toDouble() ?? 0.0,
       status: json['status'] ?? '',
       isFavorite: false,
       quantity: (json['quantity'] as num?)?.toInt() ?? 1,
@@ -45,6 +48,7 @@ class ProductModel {
       'image': image,
       'name': name,
       'price': price,
+      'discount': discount,
       'status': status,
       'isFavorite': false,
       'quantity': quantity,
@@ -58,6 +62,7 @@ class ProductModel {
     String? image,
     String? name,
     double? price,
+    double? discount,
     String? status,
     int? quantity,
   }) {
@@ -68,6 +73,7 @@ class ProductModel {
       image: image ?? this.image,
       name: name ?? this.name,
       price: price ?? this.price,
+      discount: discount ?? this.discount,
       status: status ?? this.status,
       isFavorite: false,
       quantity: quantity ?? this.quantity,
