@@ -9,7 +9,8 @@ class SingleDashItem extends StatelessWidget {
       {super.key,
       required this.title,
       required this.subtitle,
-      required this.onPressed,required this.icon});
+      required this.onPressed,
+      required this.icon});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,6 @@ class SingleDashItem extends StatelessWidget {
           children: [
             Icon(icon),
             Text(
-              
               title,
               style: const TextStyle(
                   fontSize: 18,

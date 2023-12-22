@@ -19,6 +19,102 @@ class _ProductViewState extends State<ProductView> {
   final int index = 0;
   final TextEditingController _searchController = TextEditingController();
 
+  /////////////////////////
+  ///
+  void showSellerDetailsDialog(ProductModel product) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Row(
+            children: [
+              Text('Product Details'),
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Container(
+                    color: Colors.red,
+                    child: Text(
+                      'X',
+                      style: TextStyle(color: Colors.white, fontSize: 40),
+                    ),
+                  ))
+            ],
+          ),
+          titlePadding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+          content: Container(
+            color: Colors.white,
+            width: double.infinity,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  height: 100,
+                  width: double.infinity,
+                  child: product.image == null
+                      ? CircleAvatar(
+                          radius: 50,
+                          child: Icon(Icons.person_outline),
+                        )
+                      : CircleAvatar(
+                          radius: 70,
+                          child: ClipOval(
+                            child: Image.network(product.image!),
+                          ),
+                        ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Product name:   ${product.name ?? ''}'),
+                          Text('Price:  ${product.price ?? ''}'),
+                          Text('Discount:    ${product.discount ?? ''}'),
+                          Text('Description: ${product.description ?? ''}'),
+                          Text('No of Items:   ${product.quantity ?? ''}'),
+                        ],
+                      ),
+                    ),
+                    SizedBox(width: 30),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Text('Country:     ${product.country ?? ''}'),
+                          // Text('Region:      ${product.region ?? ''}'),
+                          // Text('City:        ${product.city ?? ''}'),
+                          // Text('Zone:        ${product.zone ?? ''}'),
+                          // Text('Woreda:      ${product.woreda ?? ''}'),
+                          // Text('Kebele:      ${product.kebele ?? ''}'),
+                        ],
+                      ),
+                    )
+                  ],
+                )
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Close'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // AppProvider appProvider = Provider.of<AppProvider>(context);
@@ -35,7 +131,7 @@ class _ProductViewState extends State<ProductView> {
               decoration: InputDecoration(
                 fillColor: Colors.white,
                 filled: true,
-                labelText: 'Search by name',
+                labelText: 'Search product by name',
                 prefixIcon: Icon(Icons.search),
                 border: OutlineInputBorder(),
               ),
@@ -78,7 +174,7 @@ class _ProductViewState extends State<ProductView> {
                   } else if (snapshot.hasError) {
                     return Text('Error: ${snapshot.error}');
                   } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return const Text('No data available');
+                    return Center(child: const Text('No data available'));
                   } else {
                     List<ProductModel> filteredProducts = snapshot.data!
                         .where((product) => product.name
@@ -233,13 +329,14 @@ class _ProductViewState extends State<ProductView> {
                                             ),
                                           ],
                                           onSelectChanged: (selected) {
-                                            Routes.instance.push(
-                                              widget: ProductDetails(
-                                                productModel: product,
-                                                index: index,
-                                              ),
-                                              context: context,
-                                            );
+                                            showSellerDetailsDialog(product);
+                                            // Routes.instance.push(
+                                            //   widget: ProductDetails(
+                                            //     productModel: product,
+                                            //     index: index,
+                                            //   ),
+                                            //   context: context,
+                                            // );
                                           },
                                         );
                                       }).toList(),

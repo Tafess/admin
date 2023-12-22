@@ -1,12 +1,12 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:admin/constants/routes.dart';
+import 'package:admin/controllers/firebase_firestore_helper.dart';
 import 'package:admin/models/catagory_model.dart';
 import 'package:admin/provider/app_provider.dart';
 import 'package:admin/widgets/edit_category.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 
 class SingleCategoryItem extends StatefulWidget {
   final CategoryModel singleCategory;
@@ -19,6 +19,7 @@ class SingleCategoryItem extends StatefulWidget {
 }
 
 class _SingleCategoryItemState extends State<SingleCategoryItem> {
+  FirebaseFirestoreHelper _firestoreHelper = FirebaseFirestoreHelper();
   bool isLoading = false;
 
   @override
@@ -39,12 +40,14 @@ class _SingleCategoryItemState extends State<SingleCategoryItem> {
             children: [
               Center(
                 child: SizedBox(
+                  width: double.infinity,
+                  height: 60,
                   child: Image.network(
                     widget.singleCategory.image,
-                    scale: 12,
                   ),
                 ),
               ),
+              Text(widget.singleCategory.name),
             ],
           ),
           Positioned(

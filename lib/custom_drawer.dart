@@ -18,7 +18,7 @@ class CustomDrawer extends StatefulWidget {
 class _CustomDrawerState extends State<CustomDrawer> {
   final pages = const [
     Dashboard(),
-    CategoryViewScreen(),
+    // CategoryViewScreen(),
     ProductView(),
     UserViewScreen(),
     UserViewScreen(),

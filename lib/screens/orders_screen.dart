@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+
 import 'dart:js';
 
 import 'package:admin/provider/app_provider.dart';
@@ -14,6 +16,7 @@ class OrdersScreen extends StatefulWidget {
 
 class _OrdersScreenState extends State<OrdersScreen> {
   final TextEditingController _searchController = TextEditingController();
+
   Future<void> refreshOrders() async {
     AppProvider appProvider = Provider.of<AppProvider>(
       context as BuildContext,
@@ -32,14 +35,14 @@ class _OrdersScreenState extends State<OrdersScreen> {
         appBar: AppBar(
           toolbarHeight: 0,
           backgroundColor: Colors.white,
-          bottom: const TabBar(
+          bottom: TabBar(
             isScrollable: true,
             indicator: UnderlineTabIndicator(
                 borderSide: BorderSide(width: 10, color: Colors.blue)),
             labelPadding: EdgeInsets.symmetric(horizontal: 100),
             tabs: [
               Tab(
-                child: Text('All Orders',
+                child: Text('All Orders ',
                     style: TextStyle(
                         color: Colors.black, fontWeight: FontWeight.normal)),
               ),

@@ -31,7 +31,7 @@ class _OrderListViewState extends State<OrderListView> {
               headingRowColor:
                   MaterialStateColor.resolveWith((states) => Colors.grey),
               showCheckboxColumn: false,
-              columnSpacing: 150,
+              columnSpacing: 180,
               columns: [
                 DataColumn(
                   label: Text(
@@ -167,13 +167,14 @@ class _OrderListViewState extends State<OrderListView> {
       context: context,
       builder: (BuildContext context) {
         return Container(
+          width: double.infinity,
           decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.vertical(
                 top: Radius.circular(2),
-                bottom: Radius.circular(30),
+                bottom: Radius.circular(3),
               ),
-              border: Border.all(color: Colors.blue, width: 5)),
+              border: Border.all(color: Colors.white)),
           padding: EdgeInsets.fromLTRB(0, 0, 0, 60),
           child: SingleChildScrollView(
             scrollDirection: Axis.vertical,
@@ -181,7 +182,7 @@ class _OrderListViewState extends State<OrderListView> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Container(
-                  color: Colors.blue,
+                  color: Colors.white,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

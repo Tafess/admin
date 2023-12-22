@@ -57,7 +57,7 @@ class _DeliveryMansViewState extends State<DeliveryMansView> {
           } else if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Text('No registered seller');
+            return Center(child: const Text('No registered delivery man'));
           } else {
             return Center(
               child: Stack(
@@ -203,14 +203,20 @@ class _DeliveryMansViewState extends State<DeliveryMansView> {
                                     ),
                                   ),
                                   DataCell(
-                                    SizedBox(
-                                      height: 30,
-                                      width: 30,
-                                      child: Image.network(
-                                        seller.image ?? '',
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
+                                    seller.image == null
+                                        ? CircleAvatar(
+                                            radius: 20,
+                                            child: Icon(Icons.person),
+                                          )
+                                        : CircleAvatar(
+                                            radius: 20,
+                                            child: ClipOval(
+                                              child: Image.network(
+                                                seller.image!,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                          ),
                                   ),
                                   DataCell(
                                     Container(

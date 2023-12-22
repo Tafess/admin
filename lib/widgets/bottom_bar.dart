@@ -186,7 +186,7 @@ class _ScreensExample extends StatelessWidget {
       case 0:
         return Dashboard();
       case 1:
-        return CategoryViewScreen();
+        return CategoryScreen();
       case 2:
         return ProductView();
       case 3:

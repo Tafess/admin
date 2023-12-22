@@ -49,6 +49,7 @@ dependencies:
   flutter_web_data_table: ^1.0.0
   sidebarx: ^0.16.3
   file_picker: ^6.1.1
+  flutter_easyloading: ^3.0.5
 
 dev_dependencies:
   flutter_test:

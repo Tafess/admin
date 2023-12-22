@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:admin/constants/constants.dart';
 import 'package:admin/controllers/firebase_storage_helper.dart';
@@ -250,15 +251,29 @@ class FirebaseFirestoreHelper {
     } catch (e) {}
   }
 
-  Future<CategoryModel> addSingleCategory(File image, String name) async {
-    DocumentReference<Map<String, dynamic>> reference =
-        _firebaseFirestore.collection('categories').doc();
-    String imageUrl = await FirebaseStorageHelper.instance
-        .uploadCategoryImage(reference.id, image);
-    CategoryModel addCategory =
-        CategoryModel(image: imageUrl, id: reference.id, name: name);
-    await reference.set(addCategory.toJson());
-    return addCategory;
+  Future<CategoryModel> addSingleCategory(
+      Uint8List imageBytes, String name) async {
+    try {
+      DocumentReference<Map<String, dynamic>> reference =
+          _firebaseFirestore.collection('categories').doc();
+      print('Document Reference ID: ${reference.id}');
+
+      String imageUrl = await FirebaseStorageHelper.instance
+              .uploadCategoryImage(reference.id, Uint8List.fromList(imageBytes))
+          as String;
+
+      print('Image uploaded to Storage. URL: $imageUrl');
+
+      CategoryModel addCategory =
+          CategoryModel(image: imageUrl, id: reference.id, name: name);
+      await reference.set(addCategory.toJson());
+      print('Category information saved to Firestore.');
+
+      return addCategory;
+    } catch (e) {
+      print('Error in addSingleCategory: $e');
+      rethrow;
+    }
   }
 
   ///////// products /////////////

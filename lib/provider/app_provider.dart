@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:admin/constants/constants.dart';
 import 'package:admin/controllers/firebase_firestore_helper.dart';
@@ -261,12 +262,23 @@ class AppProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void addCategory(File image, String name) async {
-    CategoryModel categoryModel =
-        await FirebaseFirestoreHelper.instance.addSingleCategory(image, name);
+  void addCategory(dynamic image, String name) async {
+    if (image is File) {
+      CategoryModel categoryModel =
+          await FirebaseFirestoreHelper.instance.addSingleCategory(image as Uint8List, name);
 
-    _categoryList.add(categoryModel);
-    notifyListeners();
+      _categoryList.add(categoryModel);
+      notifyListeners();
+    } else if (image is Uint8List) {
+      File convertedImage = File.fromRawPath(image);
+      CategoryModel categoryModel = await FirebaseFirestoreHelper.instance
+          .addSingleCategory(convertedImage as Uint8List, name);
+
+      _categoryList.add(categoryModel);
+      notifyListeners();
+    } else {
+      print('Unsupported image type');
+    }
   }
 
   Future<void> getProduct() async {

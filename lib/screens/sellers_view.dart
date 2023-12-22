@@ -96,6 +96,97 @@ class _SellersViewState extends State<SellersView>
     );
   }
 
+  void showSellerDetailsDialog(SellerModel seller) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Seller Details'),
+          content: Container(
+            color: Colors.white,
+            width: double.infinity,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  height: 100,
+                  width: double.infinity,
+                  child: seller.image == null
+                      ? CircleAvatar(
+                          radius: 50,
+                          child: Icon(Icons.person_outline),
+                        )
+                      : CircleAvatar(
+                          radius: 70,
+                          child: ClipOval(
+                            child: Image.network(seller.image!),
+                          ),
+                        ),
+                ),
+                Container(
+                  color: Colors.white,
+                  height: 30,
+                  alignment: Alignment.center,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Text('Primary Information'),
+                      Text('Address Information'),
+                    ],
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('First Name:   ${seller.firstName ?? ''}'),
+                          Text('Middle Name:  ${seller.middleName ?? ''}'),
+                          Text('Last Name:    ${seller.lastName ?? ''}'),
+                          Text('Phone Number: ${seller.phoneNumber ?? ''}'),
+                          Text('Email:   ${seller.email ?? ''}'),
+                        ],
+                      ),
+                    ),
+                    SizedBox(width: 30),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Country:     ${seller.country ?? ''}'),
+                          Text('Region:      ${seller.region ?? ''}'),
+                          Text('City:        ${seller.city ?? ''}'),
+                          Text('Zone:        ${seller.zone ?? ''}'),
+                          Text('Woreda:      ${seller.woreda ?? ''}'),
+                          Text('Kebele:      ${seller.kebele ?? ''}'),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+                SizedBox(height: 100),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Close'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Widget buildSellerDataTable(Stream<List<SellerModel>> sellersStream) {
     return StreamBuilder<List<SellerModel>>(
         stream: sellersStream,
@@ -105,7 +196,8 @@ class _SellersViewState extends State<SellersView>
           } else if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Text('No registered sellers');
+            return Center(
+                child: Center(child: const Text('No registered seller')));
           } else {
             List<SellerModel> filteredSellers = snapshot.data!
                 .where((seller) =>
@@ -256,14 +348,20 @@ class _SellersViewState extends State<SellersView>
                               ),
                             ),
                             DataCell(
-                              SizedBox(
-                                height: 30,
-                                width: 30,
-                                child: Image.network(
-                                  seller.image ?? '',
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
+                              seller.image == null
+                                  ? CircleAvatar(
+                                      radius: 20,
+                                      child: Icon(Icons.person),
+                                    )
+                                  : CircleAvatar(
+                                      radius: 20,
+                                      child: ClipOval(
+                                        child: Image.network(
+                                          seller.image!,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
                             ),
                             DataCell(
                               Container(
@@ -375,7 +473,7 @@ class _SellersViewState extends State<SellersView>
                             ),
                           ],
                           onSelectChanged: (selected) {
-                            // Handle row selection
+                            showSellerDetailsDialog(seller);
                           },
                         );
                       }).toList(),

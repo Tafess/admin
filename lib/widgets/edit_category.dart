@@ -1,8 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
-
-
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:admin/constants/constants.dart';
 import 'package:admin/constants/primary_button.dart';
@@ -82,7 +81,8 @@ class _EditCategoryState extends State<EditCategory> {
                       Navigator.of(context).pop();
                     } else if (image != null) {
                       String imageUrl = await FirebaseStorageHelper.instance
-                          .uploadCategoryImage(widget.categoryModel.id, image!);
+                          .uploadCategoryImage(
+                              widget.categoryModel.id, image! as Uint8List);
                       CategoryModel categoryModel =
                           widget.categoryModel.copyWith(
                         image: imageUrl,
