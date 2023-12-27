@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:admin/provider/app_provider.dart';
-import 'package:admin/widgets/dashboard_widget.dart';
+import 'package:admin/widgets/count_dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -36,7 +36,7 @@ class _DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     AppProvider appProvider = Provider.of<AppProvider>(context);
 
-    return AdminTotals(appProvider: appProvider);
+    return TotalCounts(appProvider: appProvider);
   }
 }
 

@@ -12,18 +12,18 @@ import 'package:admin/widgets/single_dash_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class AdminTotals extends StatefulWidget {
-  const AdminTotals({
+class TotalCounts extends StatefulWidget {
+  const TotalCounts({
     Key? key,
     required this.appProvider,
   }) : super(key: key);
   final AppProvider appProvider;
 
   @override
-  State<AdminTotals> createState() => _AdminTotalsState();
+  State<TotalCounts> createState() => _TotalCountsState();
 }
 
-class _AdminTotalsState extends State<AdminTotals> {
+class _TotalCountsState extends State<TotalCounts> {
   final FirebaseFirestoreHelper _firestore = FirebaseFirestoreHelper();
 
   bool isloading = false;

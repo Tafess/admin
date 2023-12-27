@@ -2,7 +2,6 @@
 
 import 'package:admin/models/user_model.dart';
 import 'package:admin/provider/app_provider.dart';
-import 'package:admin/widgets/single_user_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
