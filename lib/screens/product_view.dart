@@ -1,9 +1,9 @@
-// ignore_for_file: prefer_const_constructors, avoid_unnecessary_containers
+// ignore_for_file: prefer_const_constructors, avoid_unnecessary_containers, unnecessary_null_comparison
+
+import 'dart:math';
 
 import 'package:admin/constants/routes.dart';
 import 'package:admin/models/product_model.dart';
-import 'package:admin/screens/product_details.dart';
-import 'package:admin/widgets/add_product.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -26,22 +26,35 @@ class _ProductViewState extends State<ProductView> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Row(
-            children: [
-              Text('Product Details'),
-              TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Container(
-                    color: Colors.red,
-                    child: Text(
-                      'X',
-                      style: TextStyle(color: Colors.white, fontSize: 40),
-                    ),
-                  ))
-            ],
+          title: Container(
+            height: 50,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Product Details'),
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.zero,
+                      child: Container(
+                        width: 40,
+                        alignment: Alignment.center,
+                        color: Colors.red,
+                        child: Text(
+                          'X',
+                          style: TextStyle(color: Colors.white, fontSize: 40),
+                        ),
+                      ),
+                    ))
+              ],
+            ),
           ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(),
+          ),
+          contentPadding: EdgeInsets.fromLTRB(30, 0, 0, 20),
           titlePadding: EdgeInsets.fromLTRB(20, 0, 0, 0),
           content: Container(
             color: Colors.white,
@@ -61,7 +74,7 @@ class _ProductViewState extends State<ProductView> {
                       : CircleAvatar(
                           radius: 70,
                           child: ClipOval(
-                            child: Image.network(product.image!),
+                            child: Image.network(product.image),
                           ),
                         ),
                 ),
@@ -87,7 +100,7 @@ class _ProductViewState extends State<ProductView> {
                       padding: const EdgeInsets.symmetric(horizontal: 30.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
+                        children: const [
                           // Text('Country:     ${product.country ?? ''}'),
                           // Text('Region:      ${product.region ?? ''}'),
                           // Text('City:        ${product.city ?? ''}'),
@@ -102,14 +115,6 @@ class _ProductViewState extends State<ProductView> {
               ],
             ),
           ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Close'),
-            ),
-          ],
         );
       },
     );
@@ -348,24 +353,26 @@ class _ProductViewState extends State<ProductView> {
                                 ],
                               ),
                             ),
-                            Positioned(
-                              bottom: 30,
-                              right: 2,
-                              child: FloatingActionButton(
-                                backgroundColor: Colors.green,
-                                onPressed: () {
-                                  Routes.instance.push(
-                                    widget: const AddProduct(),
-                                    context: context,
-                                  );
-                                },
-                                child: const Icon(
-                                  Icons.add,
-                                  color: Colors.white,
-                                  size: 30,
-                                ),
-                              ),
-                            ),
+                            // Positioned(
+                            //   bottom: 30,
+                            //   right: 2,
+                            //   child: FloatingActionButton(
+                            //     backgroundColor: Colors.green,
+                            //     onPressed: () {
+                            //       Routes.instance.push(
+                            //         widget: const AddProduct(),
+                            //         context: context,
+                            //       );
+                            //     },
+                            //     child: const Icon(
+                            //       Icons.add,
+                            //       color: Colors.white,
+                            //       size: 30,
+                            //     ),
+                            //   ),
+                            // ),
+                          
+                          
                           ],
                         ),
                       ),

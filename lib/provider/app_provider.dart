@@ -176,10 +176,10 @@ class AppProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> getAllOrdersFunction() async {
-    _allOrders = await FirebaseFirestoreHelper.instance.getAllOrderList();
-    notifyListeners();
-  }
+  // Future<void> getAllOrdersFunction() async {
+  //   _allOrders = await FirebaseFirestoreHelper.instance.getAllOrderList();
+  //   notifyListeners();
+  // }
 
   Future<void> getCompletedOrderList() async {
     _completedOrders =
@@ -230,7 +230,7 @@ class AppProvider with ChangeNotifier {
     await getCompletedOrderList();
     await getPendingOrders();
     await getDeliveryOrders();
-    await getAllOrdersFunction();
+    //  await getAllOrdersFunction();
   }
 
   void updateUserList(int index, SellerModel userModel) async {
@@ -264,8 +264,8 @@ class AppProvider with ChangeNotifier {
 
   void addCategory(dynamic image, String name) async {
     if (image is File) {
-      CategoryModel categoryModel =
-          await FirebaseFirestoreHelper.instance.addSingleCategory(image as Uint8List, name);
+      CategoryModel categoryModel = await FirebaseFirestoreHelper.instance
+          .addSingleCategory(image as Uint8List, name);
 
       _categoryList.add(categoryModel);
       notifyListeners();

@@ -6,8 +6,6 @@ import 'package:admin/controllers/firebase_firestore_helper.dart';
 import 'package:admin/models/seller_model.dart';
 
 class SellersView extends StatefulWidget {
-  static const String id = 'product-view';
-
   const SellersView({Key? key}) : super(key: key);
 
   @override
@@ -84,9 +82,11 @@ class _SellersViewState extends State<SellersView>
               body: TabBarView(
                 controller: _tabController,
                 children: [
-                  buildSellerDataTable(getSellersStream()),
-                  buildSellerDataTable(getSellersStream(approved: true)),
-                  buildSellerDataTable(getSellersStream(approved: false)),
+                  buildSellerDataTable(getSellersStream(role: 'seller')),
+                  buildSellerDataTable(
+                      getSellersStream(role: 'seller', approved: true)),
+                  buildSellerDataTable(
+                      getSellersStream(role: 'seller', approved: false)),
                 ],
               ),
             ),
@@ -117,11 +117,10 @@ class _SellersViewState extends State<SellersView>
                           radius: 50,
                           child: Icon(Icons.person_outline),
                         )
-                      : CircleAvatar(
-                          radius: 70,
-                          child: ClipOval(
-                            child: Image.network(seller.image!),
-                          ),
+                      : Container(
+                          width: 400,
+                          height: 300,
+                          child: Image.network(seller.image!),
                         ),
                 ),
                 Container(
@@ -487,10 +486,14 @@ class _SellersViewState extends State<SellersView>
   }
 }
 
-Stream<List<SellerModel>> getSellersStream({bool? approved}) {
+Stream<List<SellerModel>> getSellersStream({bool? approved, String? role}) {
   Query query = FirebaseFirestore.instance.collection('sellers');
   if (approved != null) {
     query = query.where('approved', isEqualTo: approved);
+  }
+
+  if (role != null) {
+    query = query.where('role', isEqualTo: role);
   }
   return query.snapshots().map((querySnapshot) {
     List<SellerModel> sellerModels = querySnapshot.docs

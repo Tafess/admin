@@ -7,6 +7,7 @@ String sellerModelToJson(SellerModel data) => json.encode(data.toJson());
 
 class SellerModel {
   bool? approved;
+  String? role;
   String? image;
   String? id;
   String? firstName;
@@ -23,6 +24,7 @@ class SellerModel {
 
   SellerModel({
     this.approved,
+    this.role,
     this.image,
     this.id,
     this.firstName,
@@ -40,6 +42,7 @@ class SellerModel {
 
   factory SellerModel.fromJson(Map<String, dynamic> json) => SellerModel(
         approved: json['approved'],
+        role: json['role'],
         image: json['image'],
         id: json['id'],
         firstName: json['firstName'],
@@ -56,6 +59,7 @@ class SellerModel {
       );
   Map<String, dynamic> toJson() => {
         'approved': false,
+        'role': role,
         'image': image,
         'id': id,
         'firstName': firstName,
@@ -77,6 +81,7 @@ class SellerModel {
   }) =>
       SellerModel(
         id: id,
+        role: role,
         firstName: firstName ?? this.firstName,
         middleName: middleName,
         lastName: lastName,

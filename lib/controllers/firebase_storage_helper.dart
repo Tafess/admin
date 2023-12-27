@@ -19,19 +19,19 @@ class FirebaseStorageHelper {
       String categoryId, Uint8List imageBytes) async {
     try {
       String fileName = DateTime.now().millisecondsSinceEpoch.toString();
-      print('fileName : $fileName');
+     // print('fileName : $fileName');
       TaskSnapshot taskSnapshot =
           await _storage.ref('$categoryId/$fileName').putData(imageBytes);
       String imageUrl = await taskSnapshot.ref.getDownloadURL();
-      print('imageUrl: $imageUrl');
+     // print('imageUrl: $imageUrl');
       return imageUrl;
     } catch (e) {
-      print('Error in uploadCategoryImage: $e');
+    //  print('Error in uploadCategoryImage: $e');
       rethrow;
     }
   }
 
-  uploadCategoryBannerToStorage(dynamic image, Uint8List uint8list) async {
+  uploadCategoryImageToStorage(dynamic image, Uint8List uint8list) async {
     Uint8List bytes;
     String imageName;
 

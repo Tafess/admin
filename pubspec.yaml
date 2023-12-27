@@ -50,6 +50,7 @@ dependencies:
   sidebarx: ^0.16.3
   file_picker: ^6.1.1
   flutter_easyloading: ^3.0.5
+  fl_chart: ^0.66.0
 
 dev_dependencies:
   flutter_test:

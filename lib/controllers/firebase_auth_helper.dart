@@ -4,7 +4,6 @@
 import 'package:admin/constants/constants.dart';
 import 'package:admin/constants/routes.dart';
 import 'package:admin/models/user_model.dart';
-import 'package:admin/screens/dashboard_screen.dart';
 import 'package:admin/screens/home_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -66,15 +65,6 @@ class FirebaseAuthHelper {
 
       _auth.currentUser!.updatePassword(password);
 
-      // UserCredential? userCredential = await _auth
-      //     .createUserWithEmailAndPassword(email: email, password: Password);
-
-      // UserModel userModel = UserModel(
-      //     id: userCredential.user!.uid, name: name, email: email, image: null);
-      // Routes.instance
-      //     .pushAndRemoveUntil(widget: const Home(), context: context);
-
-      // _firestore.collection('users').doc(userModel.id).set(userModel.toJson());
       Navigator.of(context, rootNavigator: true).pop();
       showMessage('Password changed');
       Navigator.of(context).pop();

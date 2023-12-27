@@ -216,12 +216,9 @@ class FirebaseFirestoreHelper {
 ////// £££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££
   ///
   ///
-  ///
-  ///
-  ///
-  ///
-  ///
-  ///
+  
+
+  
   Future<void> updateUser(SellerModel userModel) async {
     try {
       await _firebaseFirestore
@@ -256,13 +253,13 @@ class FirebaseFirestoreHelper {
     try {
       DocumentReference<Map<String, dynamic>> reference =
           _firebaseFirestore.collection('categories').doc();
-      print('Document Reference ID: ${reference.id}');
+      // print('Document Reference ID: ${reference.id}');
 
       String imageUrl = await FirebaseStorageHelper.instance
               .uploadCategoryImage(reference.id, Uint8List.fromList(imageBytes))
           as String;
 
-      print('Image uploaded to Storage. URL: $imageUrl');
+      // print('Image uploaded to Storage. URL: $imageUrl');
 
       CategoryModel addCategory =
           CategoryModel(image: imageUrl, id: reference.id, name: name);
@@ -281,13 +278,8 @@ class FirebaseFirestoreHelper {
   Future<List<ProductModel>> getProducts() async {
     QuerySnapshot<Map<String, dynamic>> querySnapshot =
         await _firebaseFirestore.collectionGroup('products').get();
-
-    print('Number of Products: ${querySnapshot.size}');
-
     List<ProductModel> productList =
         querySnapshot.docs.map((e) => ProductModel.fromJson(e.data())).toList();
-
-    print('Product List: $productList');
     return productList;
   }
 
@@ -311,9 +303,9 @@ class FirebaseFirestoreHelper {
     try {
       DocumentReference productRef = _firebaseFirestore
           .collection('categories')
-          .doc(productModel.categoryId) // Use categoryId as the document ID
+          .doc(productModel.categoryId)
           .collection('products')
-          .doc(productModel.id); // Use productId as the document ID
+          .doc(productModel.id);
 
       DocumentSnapshot productSnapshot = await productRef.get();
 
@@ -378,14 +370,25 @@ class FirebaseFirestoreHelper {
     return addProduct;
   }
 
-  Future<List<OrderModel>> getAllOrderList() async {
-    QuerySnapshot<Map<String, dynamic>> allOrders =
-        await _firebaseFirestore.collection('orders').get();
+//////                Get orders  ///////////////
+  ///
+// ///
+  Stream<List<OrderModel>> getOrderListStream({String? status}) {
+    CollectionReference<Map<String, dynamic>> ordersCollection =
+        _firebaseFirestore.collection('orders');
+    Query<Map<String, dynamic>> query = status != null
+        ? ordersCollection.where('status', isEqualTo: status)
+        : ordersCollection;
 
-    List<OrderModel> allOrderList =
-        allOrders.docs.map((e) => OrderModel.fromJson(e.data())).toList();
-    return allOrderList;
+    return query.snapshots().map(
+          (QuerySnapshot<Map<String, dynamic>> ordersSnapshot) => ordersSnapshot
+              .docs
+              .map((e) => OrderModel.fromJson(e.data()!))
+              .toList(),
+        );
   }
+
+/////////////////  end   ///////////////////  ////end///////
 
   Future<List<OrderModel>> getCompletedOrderList() async {
     QuerySnapshot<Map<String, dynamic>> completedOrders =
@@ -432,62 +435,35 @@ class FirebaseFirestoreHelper {
   }
 }
 
+// Future<void> updateOrder(OrderModel orderModel, String status) async {
+//   try {
+//     DocumentSnapshot orderSnapshot = await _firebaseFirestore
+//         .collection('orders')
+//         .doc(orderModel.orderId)
+//         .get();
 
+//     if (orderSnapshot.exists) {
+//       String userIdFromDatabase = orderSnapshot['userId'];
 
+//       //  print('userIdFromDatabase: $userIdFromDatabase');
 
+//       await _firebaseFirestore
+//           .collection('userOrders')
+//           .doc(userIdFromDatabase)
+//           .collection('orders')
+//           .doc(orderModel.orderId)
+//           .update({'status': status});
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  // Future<void> updateOrder(OrderModel orderModel, String status) async {
-  //   try {
-  //     DocumentSnapshot orderSnapshot = await _firebaseFirestore
-  //         .collection('orders')
-  //         .doc(orderModel.orderId)
-  //         .get();
-
-  //     if (orderSnapshot.exists) {
-  //       String userIdFromDatabase = orderSnapshot['userId'];
-
-  //       //  print('userIdFromDatabase: $userIdFromDatabase');
-
-  //       await _firebaseFirestore
-  //           .collection('userOrders')
-  //           .doc(userIdFromDatabase)
-  //           .collection('orders')
-  //           .doc(orderModel.orderId)
-  //           .update({'status': status});
-
-  //       await _firebaseFirestore
-  //           .collection('orders')
-  //           .doc(orderModel.orderId)
-  //           .update({'status': status});
-  //     } else {
-  //       print('Document does not exist.');
-  //     }
-  //   } catch (e) {
-  //     print('Error updating order: $e');
-  //   }
-
-
-
+//       await _firebaseFirestore
+//           .collection('orders')
+//           .doc(orderModel.orderId)
+//           .update({'status': status});
+//     } else {
+//       print('Document does not exist.');
+//     }
+//   } catch (e) {
+//     print('Error updating order: $e');
+//   }
 
 // // ignore_for_file: use_build_context_synchronously
 

@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:admin/provider/app_provider.dart';
-import 'package:admin/widgets/dashboard.dart';
+import 'package:admin/widgets/dashboard_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

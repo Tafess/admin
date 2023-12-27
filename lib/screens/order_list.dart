@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:admin/controllers/firebase_firestore_helper.dart';
 import 'package:admin/models/order_model.dart';
 import 'package:admin/provider/app_provider.dart';
 import 'package:flutter/material.dart';
@@ -15,10 +16,12 @@ class OrderListView extends StatefulWidget {
 }
 
 class _OrderListViewState extends State<OrderListView> {
+  FirebaseFirestoreHelper _firestore = FirebaseFirestoreHelper();
+
   @override
   Widget build(BuildContext context) {
     AppProvider appProvider = Provider.of<AppProvider>(context);
-    List<OrderModel> orders = getOrders(appProvider);
+    Stream<List<OrderModel>> ordersStream = getOrderStream(appProvider);
 
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
@@ -27,132 +30,144 @@ class _OrderListViewState extends State<OrderListView> {
         children: [
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-            child: DataTable(
-              headingRowColor:
-                  MaterialStateColor.resolveWith((states) => Colors.grey),
-              showCheckboxColumn: false,
-              columnSpacing: 180,
-              columns: [
-                DataColumn(
-                  label: Text(
-                    'Image',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                DataColumn(
-                  label: Text(
-                    ' Name',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                DataColumn(
-                  label: Text(
-                    'Quantity',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                DataColumn(
-                  label: Text(
-                    'Total(ETB)',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                DataColumn(
-                  label: Text(
-                    'Status',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ],
-              rows: orders.map((order) {
-                List<DataCell> cells = [
-                  DataCell(
-                    SizedBox(
-                      height: 30,
-                      width: 30,
-                      child: Image.network(
-                        order.products[0].image,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                  DataCell(
-                    Text(
-                      order.products[0].name,
-                      style: TextStyle(
-                        overflow: TextOverflow.ellipsis,
-                        fontSize: 14,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                  if (order.products.length > 1)
-                    DataCell(
-                      IconButton(
-                        icon: Icon(
-                          Icons.keyboard_arrow_down_sharp,
-                          size: 60,
-                        ),
-                        onPressed: () {
-                          ShowBottomSheet(context, order);
-                        },
-                      ),
-                    )
-                  else
-                    DataCell(
-                      Text(
-                        order.products[0].quantity.toString(),
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.black,
+            child: StreamBuilder<List<OrderModel>>(
+              stream: ordersStream,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  List<OrderModel> orders = snapshot.data ?? [];
+                  return DataTable(
+                    headingRowColor:
+                        MaterialStateColor.resolveWith((states) => Colors.grey),
+                    showCheckboxColumn: false,
+                    columnSpacing: 180,
+                    columns: [
+                      DataColumn(
+                        label: Text(
+                          'Image',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                    ),
-                  DataCell(
-                    Text(
-                      order.totalprice.toString(),
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.black,
+                      DataColumn(
+                        label: Text(
+                          ' Name',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  DataCell(
-                    Text(
-                      order.status,
-                      style: TextStyle(
-                        overflow: TextOverflow.ellipsis,
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: orderStatusColor(order.status),
+                      DataColumn(
+                        label: Text(
+                          'Quantity',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ];
+                      DataColumn(
+                        label: Text(
+                          'Total(ETB)',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      DataColumn(
+                        label: Text(
+                          'Status',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                    rows: orders.map((order) {
+                      List<DataCell> cells = [
+                        DataCell(
+                          SizedBox(
+                            height: 30,
+                            width: 30,
+                            child: Image.network(
+                              order.products[0].image,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        DataCell(
+                          Text(
+                            order.products[0].name,
+                            style: TextStyle(
+                              overflow: TextOverflow.ellipsis,
+                              fontSize: 14,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        if (order.products.length > 1)
+                          DataCell(
+                            IconButton(
+                              icon: Icon(
+                                Icons.keyboard_arrow_down_sharp,
+                                size: 60,
+                              ),
+                              onPressed: () {
+                                ShowBottomSheet(context, order);
+                              },
+                            ),
+                          )
+                        else
+                          DataCell(
+                            Text(
+                              order.products[0].quantity.toString(),
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                        DataCell(
+                          Text(
+                            order.totalprice.toString(),
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        DataCell(
+                          Text(
+                            order.status,
+                            style: TextStyle(
+                              overflow: TextOverflow.ellipsis,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: orderStatusColor(order.status),
+                            ),
+                          ),
+                        ),
+                      ];
 
-                return DataRow(
-                  color: MaterialStateColor.resolveWith((states) =>
-                      orders.indexOf(order) % 2 == 0
-                          ? Colors.grey.shade300
-                          : Colors.white),
-                  cells: cells,
-                );
-              }).toList(),
+                      return DataRow(
+                        color: MaterialStateColor.resolveWith((states) =>
+                            orders.indexOf(order) % 2 == 0
+                                ? Colors.grey.shade300
+                                : Colors.white),
+                        cells: cells,
+                      );
+                    }).toList(),
+                  );
+                }
+              },
             ),
           ),
           SizedBox(height: 100),
@@ -278,17 +293,17 @@ class _OrderListViewState extends State<OrderListView> {
     );
   }
 
-  List<OrderModel> getOrders(AppProvider appProvider) {
+  Stream<List<OrderModel>> getOrderStream(AppProvider appProvider) {
     if (widget.title == 'All') {
-      return appProvider.getAllOrderList;
+      return _firestore.getOrderListStream();
     } else if (widget.title == 'Pending') {
-      return appProvider.getPendingOrderList;
+      return _firestore.getOrderListStream(status: 'pending');
     } else if (widget.title == 'Completed') {
-      return appProvider.getCompletedOrder;
+      return _firestore.getOrderListStream(status: 'completed');
     } else if (widget.title == 'Delivery') {
-      return appProvider.getDeliveryOrderList;
+      return _firestore.getOrderListStream(status: 'delivery');
     } else {
-      return [];
+      return Stream.value([]);
     }
   }
 
@@ -296,8 +311,6 @@ class _OrderListViewState extends State<OrderListView> {
     switch (status) {
       case 'pending':
         return Colors.yellow.shade900;
-      // case 'canceled':
-      //   return Colors.red;
       case 'completed':
         return Colors.green;
       case 'delivery':
