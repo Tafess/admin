@@ -1,14 +1,12 @@
 // ignore_for_file: use_build_context_synchronously
 
-
 import 'package:admin/constants/constants.dart';
 import 'package:admin/constants/routes.dart';
 import 'package:admin/models/user_model.dart';
-import 'package:admin/screens/home_page.dart';
+import 'package:admin/views/screens/home_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 
 class FirebaseAuthHelper {
   static FirebaseAuthHelper instance = FirebaseAuthHelper();

@@ -18,7 +18,7 @@ class SingleDashItem extends StatelessWidget {
       padding: EdgeInsets.zero,
       onPressed: onPressed,
       child: Container(
-        width: 150,
+        width: 120,
         height: 80,
         decoration: BoxDecoration(
             border: Border.all(color: Colors.white),
@@ -27,11 +27,12 @@ class SingleDashItem extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            Divider(),
             Icon(icon),
             Text(
               title,
               style: const TextStyle(
-                  fontSize: 18,
+                  fontSize: 16,
                   color: Colors.grey,
                   fontWeight: FontWeight.bold,
                   overflow: TextOverflow.ellipsis),
@@ -39,7 +40,7 @@ class SingleDashItem extends StatelessWidget {
             Text(
               subtitle,
               style: const TextStyle(
-                  fontSize: 18,
+                  fontSize: 14,
                   color: Colors.blue,
                   overflow: TextOverflow.ellipsis),
             ),

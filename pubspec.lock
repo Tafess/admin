@@ -549,6 +549,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.1"
+  touch_mouse_behavior:
+    dependency: "direct main"
+    description:
+      name: touch_mouse_behavior
+      sha256: "56fdd7819f88bfa4d5a1d97402bbaa0f11e7253a07db5d600adf018d68ac5ff1"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   typed_data:
     dependency: transitive
     description:

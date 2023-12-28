@@ -3,15 +3,9 @@
 import 'package:admin/constants/theme.dart';
 import 'package:admin/firebase_options.dart';
 import 'package:admin/provider/app_provider.dart';
-import 'package:admin/screens/category_view.dart';
-import 'package:admin/screens/dashboard_screen.dart';
-import 'package:admin/screens/delivery_mans.dart';
-import 'package:admin/screens/home_page.dart';
-import 'package:admin/screens/orders_screen.dart';
-import 'package:admin/screens/product_view.dart';
-import 'package:admin/screens/sellers_view.dart';
-import 'package:admin/screens/user_view.dart';
-import 'package:admin/widgets/custom_side_bar.dart';
+
+import 'package:admin/views/screens/dashboard_screen.dart';
+import 'package:admin/views/widgets/custom_side_bar.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -51,7 +45,7 @@ class _MyAppState extends State<MyApp> {
             return Scaffold(
               key: _key,
               appBar: AppBar(
-                backgroundColor: Colors.white,
+                backgroundColor: Colors.green.shade300,
                 automaticallyImplyLeading: false,
                 title: Text(getTitleByIndex(_controller.selectedIndex)),
               ),

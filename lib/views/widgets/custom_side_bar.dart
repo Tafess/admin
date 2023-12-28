@@ -1,10 +1,11 @@
-import 'package:admin/screens/category_view.dart';
-import 'package:admin/screens/delivery_mans.dart';
-import 'package:admin/screens/home_page.dart';
-import 'package:admin/screens/orders_screen.dart';
-import 'package:admin/screens/product_view.dart';
-import 'package:admin/screens/sellers_view.dart';
-import 'package:admin/screens/user_view.dart';
+
+import 'package:admin/views/screens/category_view.dart';
+import 'package:admin/views/screens/delivery_mans.dart';
+import 'package:admin/views/screens/home_page.dart';
+import 'package:admin/views/screens/orders_screen.dart';
+import 'package:admin/views/screens/product_view.dart';
+import 'package:admin/views/screens/sellers_view.dart';
+import 'package:admin/views/screens/user_view.dart';
 import 'package:flutter/material.dart';
 import 'package:sidebarx/sidebarx.dart';
 
@@ -117,6 +118,7 @@ class _CustomeSideBarState extends State<CustomeSideBar> {
         SidebarXItem(label: "Delivery", icon: Icons.delivery_dining),
         SidebarXItem(label: "Customers", icon: Icons.person),
         SidebarXItem(label: "Orders", icon: Icons.circle),
+        SidebarXItem(label: "Logout", icon: Icons.logout),
       ],
     );
   }
@@ -150,6 +152,7 @@ class MainScreens extends StatelessWidget {
               return UserViewScreen();
             case 6:
               return OrdersScreen();
+              
             default:
               return Container();
           }

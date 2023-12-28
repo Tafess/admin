@@ -1,4 +1,6 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, prefer_const_constructors
+
+import 'dart:js';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -13,6 +15,29 @@ void showMessage(String message) {
     textColor: Colors.white,
     fontSize: 16.0,
   );
+}
+
+void showSnackBarMessage(
+    {BuildContext? context,
+    Color? color,
+    String? message,
+    String? label,
+    double? margin,
+    Padding? padding}) {
+  ScaffoldMessenger.of(context!).showSnackBar(SnackBar(
+    backgroundColor: color,
+    closeIconColor: color,
+    dismissDirection: DismissDirection.horizontal,
+    behavior: SnackBarBehavior.floating,
+    margin: EdgeInsets.fromLTRB(margin!, margin, margin, margin),
+    content: Text(message!),
+    duration: Duration(seconds: 3),
+    action: SnackBarAction(
+        label: label!,
+        onPressed: () {
+          Navigator.of(context).pop();
+        }),
+  ));
 }
 
 ShowLoderDialog(BuildContext context) {

@@ -1,9 +1,11 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously
 
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:admin/widgets/category_widget.dart';
+import 'package:admin/constants/constants.dart';
+import 'package:admin/views/widgets/category_widget.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -37,7 +39,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
     }
   }
 
-  _uploadCategoryImageToStorage(dynamic image) async {
+  uploadCategoryImageToStorage(dynamic image) async {
     Reference ref = _storage.ref().child('CategoryImages').child(fileName!);
     UploadTask uploadTask = ref.putData(image);
     TaskSnapshot snapshot = await uploadTask;
@@ -48,7 +50,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
   uploadCategory() async {
     if (_formKey.currentState!.validate()) {
-      String imageUrl = await _uploadCategoryImageToStorage(_image!);
+      String imageUrl = await uploadCategoryImageToStorage(_image!);
       String docId = _firestore.collection('categories').doc().id;
       await _firestore.collection('categories').doc(docId).set(
         {
@@ -57,10 +59,19 @@ class _CategoryScreenState extends State<CategoryScreen> {
           'name': categoryName,
         },
       );
+
       nameContorller.text = '';
       setState(() {
         _image = null;
       });
+
+      showSnackBarMessage(
+        context: context,
+        message: 'Category Successfully Added',
+        label: 'Ok',
+        color: Colors.green.shade400,
+        margin: 10,
+      );
     } else {
       print('OH Bad Guy');
     }

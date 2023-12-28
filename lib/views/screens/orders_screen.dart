@@ -3,7 +3,7 @@
 import 'dart:js';
 
 import 'package:admin/provider/app_provider.dart';
-import 'package:admin/screens/order_list.dart';
+import 'package:admin/views/screens/order_list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
