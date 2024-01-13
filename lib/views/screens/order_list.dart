@@ -16,7 +16,7 @@ class OrderListView extends StatefulWidget {
 }
 
 class _OrderListViewState extends State<OrderListView> {
-  FirebaseFirestoreHelper _firestore = FirebaseFirestoreHelper();
+  FirebaseFirestoreHelper _firestoreHelper = FirebaseFirestoreHelper();
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class _OrderListViewState extends State<OrderListView> {
               stream: ordersStream,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator();
+                  return Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 } else {
@@ -295,13 +295,13 @@ class _OrderListViewState extends State<OrderListView> {
 
   Stream<List<OrderModel>> getOrderStream(AppProvider appProvider) {
     if (widget.title == 'All') {
-      return _firestore.getOrderListStream();
+      return _firestoreHelper.getOrderListStream();
     } else if (widget.title == 'Pending') {
-      return _firestore.getOrderListStream(status: 'pending');
+      return _firestoreHelper.getOrderListStream(status: 'pending');
     } else if (widget.title == 'Completed') {
-      return _firestore.getOrderListStream(status: 'completed');
+      return _firestoreHelper.getOrderListStream(status: 'completed');
     } else if (widget.title == 'Delivery') {
-      return _firestore.getOrderListStream(status: 'delivery');
+      return _firestoreHelper.getOrderListStream(status: 'delivery');
     } else {
       return Stream.value([]);
     }

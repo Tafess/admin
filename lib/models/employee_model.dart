@@ -1,15 +1,16 @@
 import 'dart:convert';
 
-SellerModel sellerModelFromJson(String str) =>
-    SellerModel.fromJson(json.decode(str));
+EmployeeModel employeeModelFromJson(String str) =>
+    EmployeeModel.fromJson(json.decode(str));
 
-String sellerModelToJson(SellerModel data) => json.encode(data.toJson());
+String employeeModelToJson(EmployeeModel data) => json.encode(data.toJson());
 
-class SellerModel {
-  bool? approved;
-  String? role;
-  String? image;
-  String? id;
+class EmployeeModel {
+  String? profile;
+  String? idCard;
+  bool approved;
+  String role;
+  String? employeeId;
   String? firstName;
   String? middleName;
   String? lastName;
@@ -22,11 +23,12 @@ class SellerModel {
   String? woreda;
   String? kebele;
 
-  SellerModel({
-    this.approved,
-    this.role,
-    this.image,
-    this.id,
+  EmployeeModel({
+    this.profile,
+    this.idCard,
+    required this.approved,
+    required this.role,
+    this.employeeId,
     this.firstName,
     this.middleName,
     this.lastName,
@@ -40,11 +42,12 @@ class SellerModel {
     this.kebele,
   });
 
-  factory SellerModel.fromJson(Map<String, dynamic> json) => SellerModel(
+  factory EmployeeModel.fromJson(Map<String, dynamic> json) => EmployeeModel(
+        profile: json['profile'],
+        idCard: json['idCard'],
         approved: json['approved'],
         role: json['role'],
-        image: json['image'],
-        id: json['id'],
+        employeeId: json['id'],
         firstName: json['firstName'],
         middleName: json['middleName'],
         lastName: json['lastName'],
@@ -58,10 +61,11 @@ class SellerModel {
         kebele: json['kebele'],
       );
   Map<String, dynamic> toJson() => {
+        'profile': profile,
+        'idCard': idCard,
         'approved': false,
         'role': role,
-        'image': image,
-        'id': id,
+        'id': employeeId,
         'firstName': firstName,
         'middleName': middleName,
         'lastName': lastName,
@@ -75,18 +79,19 @@ class SellerModel {
         'kebele': kebele,
       };
 
-  SellerModel copyWith({
+  EmployeeModel copyWith({
     String? firstName,
-    String? image,
+    String? profile,
   }) =>
-      SellerModel(
-        id: id,
-        role: role,
+      EmployeeModel(
+        employeeId: employeeId,
+        idCard: idCard,
+        approved: approved,
         firstName: firstName ?? this.firstName,
         middleName: middleName,
         lastName: lastName,
         phoneNumber: phoneNumber,
-        image: image ?? this.image,
+        profile: profile ?? this.profile,
         email: email,
         country: country,
         region: region,
@@ -94,5 +99,6 @@ class SellerModel {
         zone: zone,
         woreda: woreda,
         kebele: kebele,
+        role: role,
       );
 }

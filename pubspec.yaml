@@ -52,6 +52,9 @@ dependencies:
   flutter_easyloading: ^3.0.5
   fl_chart: ^0.66.0
   touch_mouse_behavior: ^1.0.1
+  google_maps_flutter: ^2.5.2
+  google_maps_flutter_web: ^0.5.4+3
+  location: ^5.0.3
 
 dev_dependencies:
   flutter_test:

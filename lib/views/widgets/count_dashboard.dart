@@ -2,8 +2,11 @@
 
 import 'package:admin/constants/routes.dart';
 import 'package:admin/controllers/firebase_firestore_helper.dart';
+import 'package:admin/models/catagory_model.dart';
 import 'package:admin/models/order_model.dart';
-import 'package:admin/models/seller_model.dart';
+import 'package:admin/models/product_model.dart';
+import 'package:admin/models/employee_model.dart';
+import 'package:admin/models/customer_model.dart';
 import 'package:admin/provider/app_provider.dart';
 import 'package:admin/views/widgets/single_dash_item.dart';
 import 'package:flutter/material.dart';
@@ -81,39 +84,37 @@ class _TotalCountsState extends State<TotalCounts> {
     );
   }
 
-  Widget usersStreamBuilder(
+  Widget employeesStreamBuilder(
     IconData icon,
     String title,
     String role, {
     bool withApproved = false,
   }) {
-    return StreamBuilder<List<SellerModel>>(
+    return StreamBuilder<List<EmployeeModel>>(
       stream: role.isEmpty
-          ? _firestore.getSellersStream()
+          ? _firestore.getEmployeesStream()
           : (withApproved
-              ? _firestore.getSellersStream(role: role, approved: true)
-              : _firestore.getSellersStream(role: role)),
+              ? _firestore.getEmployeesStream(role: role, approved: true)
+              : _firestore.getEmployeesStream(role: role)),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return Flexible(
-            child: SingleDashItem(
-              onPressed: () {
-                _showUserInfoDialog(
-                  context: context,
-                  icon: icon,
-                  title: title,
-                  subtitle: snapshot.data!.length.toString(),
-                );
-              },
-              icon: icon,
-              title: title,
-              subtitle: snapshot.data!.length.toString(),
-            ),
+          return SingleDashItem(
+            onPressed: () {
+              _showUserInfoDialog(
+                context: context,
+                icon: icon,
+                title: title,
+                subtitle: snapshot.data!.length.toString(),
+              );
+            },
+            icon: icon,
+            title: title,
+            subtitle: snapshot.data!.length.toString(),
           );
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else {
-          return CircularProgressIndicator();
+          return Center(child: CircularProgressIndicator());
         }
       },
     );
@@ -130,20 +131,108 @@ class _TotalCountsState extends State<TotalCounts> {
           : _firestore.getOrderListStream(status: status),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return Flexible(
-            child: SingleDashItem(
-              onPressed: () {
-                _showUserInfoDialog(
-                  context: context,
-                  icon: icon,
-                  title: title,
-                  subtitle: snapshot.data!.length.toString(),
-                );
-              },
-              icon: icon,
-              title: title,
-              subtitle: snapshot.data!.length.toString(),
-            ),
+          return SingleDashItem(
+            onPressed: () {
+              _showUserInfoDialog(
+                context: context,
+                icon: icon,
+                title: title,
+                subtitle: snapshot.data!.length.toString(),
+              );
+            },
+            icon: icon,
+            title: title,
+            subtitle: snapshot.data!.length.toString(),
+          );
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else {
+          return Center(child: CircularProgressIndicator());
+        }
+      },
+    );
+  }
+
+  Widget categoriesStreamBuilder(
+    IconData icon,
+    String title,
+  ) {
+    return StreamBuilder<List<CategoryModel>>(
+      stream: _firestore.getCategories(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return SingleDashItem(
+            onPressed: () {
+              _showUserInfoDialog(
+                context: context,
+                icon: icon,
+                title: title,
+                subtitle: snapshot.data!.length.toString(),
+              );
+            },
+            icon: icon,
+            title: title,
+            subtitle: snapshot.data!.length.toString(),
+          );
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else {
+          return Center(child: CircularProgressIndicator());
+        }
+      },
+    );
+  }
+
+  Widget productsStreamBuilder(
+    IconData icon,
+    String title,
+  ) {
+    return StreamBuilder<List<ProductModel>>(
+      stream: _firestore.getProducts(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return SingleDashItem(
+            onPressed: () {
+              _showUserInfoDialog(
+                context: context,
+                icon: icon,
+                title: title,
+                subtitle: snapshot.data!.length.toString(),
+              );
+            },
+            icon: icon,
+            title: title,
+            subtitle: snapshot.data!.length.toString(),
+          );
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else {
+          return Center(child: CircularProgressIndicator());
+        }
+      },
+    );
+  }
+
+  Widget customersStreamBuilder(
+    IconData icon,
+    String title,
+  ) {
+    return StreamBuilder<List<CustomerModel>>(
+      stream: _firestore.getCustomers(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return SingleDashItem(
+            onPressed: () {
+              _showUserInfoDialog(
+                context: context,
+                icon: icon,
+                title: title,
+                subtitle: snapshot.data!.length.toString(),
+              );
+            },
+            icon: icon,
+            title: title,
+            subtitle: snapshot.data!.length.toString(),
           );
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
@@ -169,70 +258,33 @@ class _TotalCountsState extends State<TotalCounts> {
               scrollDirection: Axis.horizontal,
               physics: ScrollPhysics(),
               child: Container(
-                color: Colors.grey.shade100,
-                height: 90,
+                color: Colors.blue.shade400,
+                height: 100,
                 width: MediaQuery.of(context).size.width,
-                child: Expanded(
+                child: Flexible(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Flexible(
-                        child: SingleDashItem(
-                          onPressed: () {
-                            _showUserInfoDialog(
-                              context: context,
-                              icon: Icons.verified_user_outlined,
-                              title: 'Users',
-                              subtitle: widget.appProvider.getUserList.length
-                                  .toString(),
-                            );
-                          },
-                          icon: Icons.verified_user_outlined,
-                          title: 'Users',
-                          subtitle:
-                              widget.appProvider.getUserList.length.toString(),
-                        ),
+                      Expanded(
+                          child: categoriesStreamBuilder(
+                              Icons.category, 'Categories')),
+                      Expanded(
+                          child: productsStreamBuilder(
+                              Icons.shop_2_rounded, 'Products')),
+                      Expanded(
+                          child: employeesStreamBuilder(
+                              Icons.person, 'All employees', '')),
+                      Expanded(
+                          child: employeesStreamBuilder(
+                              Icons.person, 'Sellers', 'seller')),
+                      Expanded(
+                        child: employeesStreamBuilder(
+                            Icons.person, 'Delivery Mans', 'delivery'),
                       ),
-                      usersStreamBuilder(Icons.person, 'Sellers', 'seller'),
-                      usersStreamBuilder(
-                          Icons.person, 'Delivery Mans', 'delivery'),
-                      usersStreamBuilder(Icons.person, 'All Users', ''),
-                      Flexible(
-                        child: SingleDashItem(
-                          onPressed: () {
-                            _showUserInfoDialog(
-                              context: context,
-                              icon: Icons.category,
-                              title: 'Categories',
-                              subtitle: widget
-                                  .appProvider.getCategoryList.length
-                                  .toString(),
-                            );
-                          },
-                          icon: Icons.category,
-                          title: 'Categories',
-                          subtitle: widget.appProvider.getCategoryList.length
-                              .toString(),
-                        ),
-                      ),
-                      Flexible(
-                        child: SingleDashItem(
-                          onPressed: () {
-                            _showUserInfoDialog(
-                              context: context,
-                              icon: Icons.shop_2,
-                              title: 'Products',
-                              subtitle: widget.appProvider.getProducts.length
-                                  .toString(),
-                            );
-                          },
-                          icon: Icons.shop_2,
-                          title: 'Products',
-                          subtitle:
-                              widget.appProvider.getProducts.length.toString(),
-                        ),
-                      ),
-                      Flexible(
+                      Expanded(
+                          child: customersStreamBuilder(
+                              Icons.person, 'Customers')),
+                      Expanded(
                         child: SingleDashItem(
                           onPressed: () {
                             _showUserInfoDialog(
@@ -249,13 +301,21 @@ class _TotalCountsState extends State<TotalCounts> {
                               'ETB ${widget.appProvider.getTotalEarnings}',
                         ),
                       ),
-                      ordersStreamBuilder(Icons.pending, 'Orders', ''),
-                      ordersStreamBuilder(
-                          Icons.pending, 'Pending order', 'pending'),
-                      ordersStreamBuilder(
-                          Icons.disc_full, 'Completed order', 'completed'),
-                      ordersStreamBuilder(
-                          Icons.delivery_dining, 'Delivery order', 'delivery'),
+                      Expanded(
+                          child:
+                              ordersStreamBuilder(Icons.pending, 'Orders', '')),
+                      Expanded(
+                        child: ordersStreamBuilder(
+                            Icons.pending, 'Pending order', 'pending'),
+                      ),
+                      Expanded(
+                        child: ordersStreamBuilder(
+                            Icons.disc_full, 'Completed order', 'completed'),
+                      ),
+                      Expanded(
+                        child: ordersStreamBuilder(Icons.delivery_dining,
+                            'Delivery order', 'delivery'),
+                      ),
                     ],
                   ),
                 ),
@@ -267,3 +327,59 @@ class _TotalCountsState extends State<TotalCounts> {
     );
   }
 }
+
+
+  // Flexible(
+                      //   child: SingleDashItem(
+                      //     onPressed: () {
+                      //       _showUserInfoDialog(
+                      //         context: context,
+                      //         icon: Icons.verified_user_outlined,
+                      //         title: 'Users',
+                      //         subtitle: widget.appProvider.getUserList.length
+                      //             .toString(),
+                      //       );
+                      //     },
+                      //     icon: Icons.verified_user_outlined,
+                      //     title: 'Users',
+                      //     subtitle:
+                      //         widget.appProvider.getUserList.length.toString(),
+                      //   ),
+                      // ),
+                      // Flexible(
+                      //   child: SingleDashItem(
+                      //     onPressed: () {
+                      //       _showUserInfoDialog(
+                      //         context: context,
+                      //         icon: Icons.category,
+                      //         title: 'Categories',
+                      //         subtitle: widget
+                      //             .appProvider.getCategoryList.length
+                      //             .toString(),
+                      //       );
+                      //     },
+                      //     icon: Icons.category,
+                      //     title: 'Categories',
+                      //     subtitle: widget.appProvider.getCategoryList.length
+                      //         .toString(),
+                      //   ),
+                      // ),
+                      // Flexible(
+                      //   child: SingleDashItem(
+                      //     onPressed: () {
+                      //       _showUserInfoDialog(
+                      //         context: context,
+                      //         icon: Icons.shop_2,
+                      //         title: 'Products',
+                      //         subtitle: widget.appProvider.getProducts.length
+                      //             .toString(),
+                      //       );
+                      //     },
+                      //     icon: Icons.shop_2,
+                      //     title: 'Products',
+                      //     subtitle:
+                      //         widget.appProvider.getProducts.length.toString(),
+                      //   ),
+                      // ),
+
+                   

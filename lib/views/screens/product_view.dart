@@ -3,6 +3,7 @@
 import 'dart:math';
 
 import 'package:admin/constants/routes.dart';
+import 'package:admin/controllers/firebase_firestore_helper.dart';
 import 'package:admin/models/product_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -19,9 +20,11 @@ class _ProductViewState extends State<ProductView> {
   final int index = 0;
   final TextEditingController _searchController = TextEditingController();
 
+  final FirebaseFirestoreHelper _firestoreHelper = FirebaseFirestoreHelper();
+
   /////////////////////////
   ///
-  void showSellerDetailsDialog(ProductModel product) {
+  void showProductDetailsDialog(ProductModel product) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -172,7 +175,7 @@ class _ProductViewState extends State<ProductView> {
               // ),
 
               body: StreamBuilder<List<ProductModel>>(
-                stream: getProducts(),
+                stream: _firestoreHelper.getProducts(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
@@ -334,7 +337,7 @@ class _ProductViewState extends State<ProductView> {
                                             ),
                                           ],
                                           onSelectChanged: (selected) {
-                                            showSellerDetailsDialog(product);
+                                            showProductDetailsDialog(product);
                                             // Routes.instance.push(
                                             //   widget: ProductDetails(
                                             //     productModel: product,
@@ -353,26 +356,6 @@ class _ProductViewState extends State<ProductView> {
                                 ],
                               ),
                             ),
-                            // Positioned(
-                            //   bottom: 30,
-                            //   right: 2,
-                            //   child: FloatingActionButton(
-                            //     backgroundColor: Colors.green,
-                            //     onPressed: () {
-                            //       Routes.instance.push(
-                            //         widget: const AddProduct(),
-                            //         context: context,
-                            //       );
-                            //     },
-                            //     child: const Icon(
-                            //       Icons.add,
-                            //       color: Colors.white,
-                            //       size: 30,
-                            //     ),
-                            //   ),
-                            // ),
-                          
-                          
                           ],
                         ),
                       ),
@@ -385,20 +368,6 @@ class _ProductViewState extends State<ProductView> {
         ],
       ),
     );
-  }
-
-  final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
-
-  Stream<List<ProductModel>> getProducts() {
-    return _firebaseFirestore
-        .collectionGroup('products')
-        .snapshots()
-        .map((querySnapshot) {
-      List<ProductModel> productList = querySnapshot.docs
-          .map((e) => ProductModel.fromJson(e.data()))
-          .toList();
-      return productList;
-    });
   }
 }
 

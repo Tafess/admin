@@ -48,8 +48,10 @@ ShowLoderDialog(BuildContext context) {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const CircularProgressIndicator(
-              color: Colors.red,
+            Center(
+              child: const CircularProgressIndicator(
+                color: Colors.red,
+              ),
             ),
             const SizedBox(
               height: 18,

@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:admin/controllers/firebase_firestore_helper.dart';
-import 'package:admin/models/seller_model.dart';
+import 'package:admin/models/employee_model.dart';
 import 'package:touch_mouse_behavior/touch_mouse_behavior.dart';
 
 class SellersView extends StatefulWidget {
@@ -17,6 +17,7 @@ class _SellersViewState extends State<SellersView>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final TextEditingController _searchController = TextEditingController();
+  final FirebaseFirestoreHelper _firestoreHelper = FirebaseFirestoreHelper();
 
   @override
   void initState() {
@@ -83,11 +84,12 @@ class _SellersViewState extends State<SellersView>
               body: TabBarView(
                 controller: _tabController,
                 children: [
-                  buildSellerDataTable(getSellersStream(role: 'seller')),
                   buildSellerDataTable(
-                      getSellersStream(role: 'seller', approved: true)),
-                  buildSellerDataTable(
-                      getSellersStream(role: 'seller', approved: false)),
+                      _firestoreHelper.getEmployeesStream(role: 'seller')),
+                  buildSellerDataTable(_firestoreHelper.getEmployeesStream(
+                      role: 'seller', approved: true)),
+                  buildSellerDataTable(_firestoreHelper.getEmployeesStream(
+                      role: 'seller', approved: false)),
                 ],
               ),
             ),
@@ -97,7 +99,7 @@ class _SellersViewState extends State<SellersView>
     );
   }
 
-  void showSellerDetailsDialog(SellerModel seller) {
+  void showSellerDetailsDialog(EmployeeModel seller) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -113,7 +115,7 @@ class _SellersViewState extends State<SellersView>
                 Container(
                   height: 100,
                   width: double.infinity,
-                  child: seller.image == null
+                  child: seller.idCard == null
                       ? CircleAvatar(
                           radius: 50,
                           child: Icon(Icons.person_outline),
@@ -121,7 +123,7 @@ class _SellersViewState extends State<SellersView>
                       : Container(
                           width: 400,
                           height: 300,
-                          child: Image.network(seller.image!),
+                          child: Image.network(seller.idCard!),
                         ),
                 ),
                 Container(
@@ -187,8 +189,8 @@ class _SellersViewState extends State<SellersView>
     );
   }
 
-  Widget buildSellerDataTable(Stream<List<SellerModel>> sellersStream) {
-    return StreamBuilder<List<SellerModel>>(
+  Widget buildSellerDataTable(Stream<List<EmployeeModel>> sellersStream) {
+    return StreamBuilder<List<EmployeeModel>>(
         stream: sellersStream,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -197,9 +199,9 @@ class _SellersViewState extends State<SellersView>
             return Text('Error: ${snapshot.error}');
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return Center(
-                child: Center(child: const Text('No registered seller')));
+                child: Center(child: const Text('No seller data available')));
           } else {
-            List<SellerModel> filteredSellers = snapshot.data!
+            List<EmployeeModel> filteredSellers = snapshot.data!
                 .where((seller) =>
                     seller.firstName!
                         .toLowerCase()
@@ -223,25 +225,28 @@ class _SellersViewState extends State<SellersView>
                             (states) => Colors.grey.shade700),
                         showCheckboxColumn: false,
                         columnSpacing: 100,
-                        dataTextStyle: TextStyle(fontFamily: 'Normal'),
+                        dataTextStyle: TextStyle(fontFamily: 'normal'),
                         columns: const [
                           DataColumn(
                               label: Text(
                             'Permission',
                             style: TextStyle(
-                                color: Colors.white, fontWeight: FontWeight.bold),
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
                           )),
                           DataColumn(
                               label: Text(
                             'Image',
                             style: TextStyle(
-                                color: Colors.white, fontWeight: FontWeight.bold),
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
                           )),
                           DataColumn(
                               label: Text(
                             'Id',
                             style: TextStyle(
-                                color: Colors.white, fontWeight: FontWeight.bold),
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
                           )),
                           DataColumn(
                               label: Text('First Name',
@@ -301,7 +306,7 @@ class _SellersViewState extends State<SellersView>
                         ],
                         rows: filteredSellers.asMap().entries.map((entry) {
                           final int rowIndex = entry.key;
-                          final SellerModel seller = entry.value;
+                          final EmployeeModel seller = entry.value;
                           return DataRow(
                             color: MaterialStateColor.resolveWith((states) =>
                                 rowIndex % 2 == 0
@@ -323,9 +328,9 @@ class _SellersViewState extends State<SellersView>
                                           seller.approved = false;
                                         });
                                       }
-                    
+
                                       await FirebaseFirestoreHelper.instance
-                                          .updateSeller(seller);
+                                          .updateEmployee(seller);
                                     },
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: Colors.white,
@@ -349,7 +354,7 @@ class _SellersViewState extends State<SellersView>
                                 ),
                               ),
                               DataCell(
-                                seller.image == null
+                                seller.idCard == null
                                     ? CircleAvatar(
                                         radius: 20,
                                         child: Icon(Icons.person),
@@ -358,7 +363,7 @@ class _SellersViewState extends State<SellersView>
                                         radius: 20,
                                         child: ClipOval(
                                           child: Image.network(
-                                            seller.image!,
+                                            seller.idCard!,
                                             fit: BoxFit.cover,
                                           ),
                                         ),
@@ -367,7 +372,7 @@ class _SellersViewState extends State<SellersView>
                               DataCell(
                                 Container(
                                   child: Text(
-                                    seller.id ?? '',
+                                    seller.employeeId ?? '',
                                     style: const TextStyle(
                                         fontSize: 14, color: Colors.black),
                                   ),
@@ -489,19 +494,20 @@ class _SellersViewState extends State<SellersView>
   }
 }
 
-Stream<List<SellerModel>> getSellersStream({bool? approved, String? role}) {
-  Query query = FirebaseFirestore.instance.collection('sellers');
-  if (approved != null) {
-    query = query.where('approved', isEqualTo: approved);
-  }
+// Stream<List<EmployeeModel>> getEmployeesStream({bool? approved, String? role}) {
+//   Query query = FirebaseFirestore.instance.collection('employees');
+//   if (approved != null) {
+//     query = query.where('approved', isEqualTo: approved);
+//   }
 
-  if (role != null) {
-    query = query.where('role', isEqualTo: role);
-  }
-  return query.snapshots().map((querySnapshot) {
-    List<SellerModel> sellerModels = querySnapshot.docs
-        .map((doc) => SellerModel.fromJson(doc.data() as Map<String, dynamic>))
-        .toList();
-    return sellerModels;
-  });
-}
+//   if (role != null) {
+//     query = query.where('role', isEqualTo: role);
+//   }
+//   return query.snapshots().map((querySnapshot) {
+//     List<EmployeeModel> employeeModels = querySnapshot.docs
+//         .map(
+//             (doc) => EmployeeModel.fromJson(doc.data() as Map<String, dynamic>))
+//         .toList();
+//     return employeeModels;
+//   });
+// }

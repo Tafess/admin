@@ -1,9 +1,10 @@
 // ignore_for_file: prefer_const_constructors, avoid_unnecessary_containers, prefer_const_literals_to_create_immutables
 
+import 'package:admin/controllers/firebase_storage_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:admin/controllers/firebase_firestore_helper.dart';
-import 'package:admin/models/seller_model.dart';
+import 'package:admin/models/employee_model.dart';
 import 'package:touch_mouse_behavior/touch_mouse_behavior.dart';
 
 class DeliveryMansView extends StatefulWidget {
@@ -17,6 +18,7 @@ class _DeliveryMansViewState extends State<DeliveryMansView>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final TextEditingController _searchController = TextEditingController();
+  final FirebaseFirestoreHelper _firestoreHelper = FirebaseFirestoreHelper();
 
   @override
   void initState() {
@@ -83,13 +85,13 @@ class _DeliveryMansViewState extends State<DeliveryMansView>
               body: TabBarView(
                 controller: _tabController,
                 children: [
-                  buildSellerDataTable(
-                    getSellersStream(role: 'delivery'),
+                  buildDeliveryDataTable(
+                    _firestoreHelper.getEmployeesStream(role: 'delivery'),
                   ),
-                  buildSellerDataTable(
-                      getSellersStream(approved: true, role: 'delivery')),
-                  buildSellerDataTable(
-                      getSellersStream(approved: false, role: 'delivery')),
+                  buildDeliveryDataTable(_firestoreHelper.getEmployeesStream(
+                      approved: true, role: 'delivery')),
+                  buildDeliveryDataTable(_firestoreHelper.getEmployeesStream(
+                      approved: false, role: 'delivery')),
                 ],
               ),
             ),
@@ -99,12 +101,12 @@ class _DeliveryMansViewState extends State<DeliveryMansView>
     );
   }
 
-  void showSellerDetailsDialog(SellerModel seller) {
+  void showDeliveryDetailsDialog(EmployeeModel delivery) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Seller Details'),
+          title: Text('Delivery man Details'),
           content: Container(
             color: Colors.white,
             width: double.infinity,
@@ -115,7 +117,7 @@ class _DeliveryMansViewState extends State<DeliveryMansView>
                 Container(
                   height: 100,
                   width: double.infinity,
-                  child: seller.image == null
+                  child: delivery.idCard == null
                       ? CircleAvatar(
                           radius: 50,
                           child: Icon(Icons.person_outline),
@@ -123,7 +125,7 @@ class _DeliveryMansViewState extends State<DeliveryMansView>
                       : CircleAvatar(
                           radius: 70,
                           child: ClipOval(
-                            child: Image.network(seller.image!),
+                            child: Image.network(delivery.idCard!),
                           ),
                         ),
                 ),
@@ -148,11 +150,11 @@ class _DeliveryMansViewState extends State<DeliveryMansView>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('First Name:   ${seller.firstName ?? ''}'),
-                          Text('Middle Name:  ${seller.middleName ?? ''}'),
-                          Text('Last Name:    ${seller.lastName ?? ''}'),
-                          Text('Phone Number: ${seller.phoneNumber ?? ''}'),
-                          Text('Email:   ${seller.email ?? ''}'),
+                          Text('First Name:   ${delivery.firstName ?? ''}'),
+                          Text('Middle Name:  ${delivery.middleName ?? ''}'),
+                          Text('Last Name:    ${delivery.lastName ?? ''}'),
+                          Text('Phone Number: ${delivery.phoneNumber ?? ''}'),
+                          Text('Email:   ${delivery.email ?? ''}'),
                         ],
                       ),
                     ),
@@ -162,12 +164,12 @@ class _DeliveryMansViewState extends State<DeliveryMansView>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Country:     ${seller.country ?? ''}'),
-                          Text('Region:      ${seller.region ?? ''}'),
-                          Text('City:        ${seller.city ?? ''}'),
-                          Text('Zone:        ${seller.zone ?? ''}'),
-                          Text('Woreda:      ${seller.woreda ?? ''}'),
-                          Text('Kebele:      ${seller.kebele ?? ''}'),
+                          Text('Country:     ${delivery.country ?? ''}'),
+                          Text('Region:      ${delivery.region ?? ''}'),
+                          Text('City:        ${delivery.city ?? ''}'),
+                          Text('Zone:        ${delivery.zone ?? ''}'),
+                          Text('Woreda:      ${delivery.woreda ?? ''}'),
+                          Text('Kebele:      ${delivery.kebele ?? ''}'),
                         ],
                       ),
                     )
@@ -190,8 +192,8 @@ class _DeliveryMansViewState extends State<DeliveryMansView>
     );
   }
 
-  Widget buildSellerDataTable(Stream<List<SellerModel>> sellersStream) {
-    return StreamBuilder<List<SellerModel>>(
+  Widget buildDeliveryDataTable(Stream<List<EmployeeModel>> sellersStream) {
+    return StreamBuilder<List<EmployeeModel>>(
         stream: sellersStream,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -200,9 +202,10 @@ class _DeliveryMansViewState extends State<DeliveryMansView>
             return Text('Error: ${snapshot.error}');
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return Center(
-                child: Center(child: const Text('No registered seller')));
+                child: Center(
+                    child: const Text('No delivery man data available')));
           } else {
-            List<SellerModel> filteredSellers = snapshot.data!
+            List<EmployeeModel> filteredSellers = snapshot.data!
                 .where((seller) =>
                     seller.firstName!
                         .toLowerCase()
@@ -307,7 +310,7 @@ class _DeliveryMansViewState extends State<DeliveryMansView>
                         ],
                         rows: filteredSellers.asMap().entries.map((entry) {
                           final int rowIndex = entry.key;
-                          final SellerModel seller = entry.value;
+                          final EmployeeModel seller = entry.value;
                           return DataRow(
                             color: MaterialStateColor.resolveWith((states) =>
                                 rowIndex % 2 == 0
@@ -331,7 +334,7 @@ class _DeliveryMansViewState extends State<DeliveryMansView>
                                       }
 
                                       await FirebaseFirestoreHelper.instance
-                                          .updateSeller(seller);
+                                          .updateEmployee(seller);
                                     },
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: Colors.white,
@@ -355,7 +358,7 @@ class _DeliveryMansViewState extends State<DeliveryMansView>
                                 ),
                               ),
                               DataCell(
-                                seller.image == null
+                                seller.idCard == null
                                     ? CircleAvatar(
                                         radius: 20,
                                         child: Icon(Icons.person),
@@ -364,7 +367,7 @@ class _DeliveryMansViewState extends State<DeliveryMansView>
                                         radius: 20,
                                         child: ClipOval(
                                           child: Image.network(
-                                            seller.image!,
+                                            seller.idCard!,
                                             fit: BoxFit.cover,
                                           ),
                                         ),
@@ -373,7 +376,7 @@ class _DeliveryMansViewState extends State<DeliveryMansView>
                               DataCell(
                                 Container(
                                   child: Text(
-                                    seller.id ?? '',
+                                    seller.idCard ?? '',
                                     style: const TextStyle(
                                         fontSize: 14, color: Colors.black),
                                   ),
@@ -480,7 +483,7 @@ class _DeliveryMansViewState extends State<DeliveryMansView>
                               ),
                             ],
                             onSelectChanged: (selected) {
-                              showSellerDetailsDialog(seller);
+                              showDeliveryDetailsDialog(seller);
                             },
                           );
                         }).toList(),
@@ -493,21 +496,4 @@ class _DeliveryMansViewState extends State<DeliveryMansView>
           }
         });
   }
-}
-
-Stream<List<SellerModel>> getSellersStream({bool? approved, String? role}) {
-  Query query = FirebaseFirestore.instance.collection('sellers');
-  if (approved != null) {
-    query = query.where('approved', isEqualTo: approved);
-  }
-
-  if (role != null) {
-    query = query.where('role', isEqualTo: role);
-  }
-  return query.snapshots().map((querySnapshot) {
-    List<SellerModel> sellerModels = querySnapshot.docs
-        .map((doc) => SellerModel.fromJson(doc.data() as Map<String, dynamic>))
-        .toList();
-    return sellerModels;
-  });
 }

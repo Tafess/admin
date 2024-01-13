@@ -1,27 +1,28 @@
 import 'dart:convert';
 
-UserModel userModelFromJson(String str) => UserModel.fromJson(json.decode(str));
+CustomerModel customerModelFromJson(String str) =>
+    CustomerModel.fromJson(json.decode(str));
 
-String userModelToJson(UserModel data) => json.encode(data.toJson());
+String customerModelToJson(CustomerModel data) => json.encode(data.toJson());
 
-class UserModel {
+class CustomerModel {
   String? image;
   String id;
   String name;
   String email;
 
-  UserModel({
+  CustomerModel({
     this.image,
     required this.id,
     required this.name,
     required this.email,
   });
 
-  factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
-        image: json['image'],
-        id: json['id'],
-        name: json['name'],
-        email: json['email'],
+  factory CustomerModel.fromJson(Map<String, dynamic> json) => CustomerModel(
+        image: json['image'] ?? '',
+        id: json['id'] ?? '',
+        name: json['name'] ?? '',
+        email: json['email'] ?? '',
       );
   Map<String, dynamic> toJson() => {
         'image': image,
@@ -30,11 +31,11 @@ class UserModel {
         'email': email,
       };
 
-  UserModel copyWith({
+  CustomerModel copyWith({
     String? name,
     image,
   }) =>
-      UserModel(
+      CustomerModel(
           id: id,
           name: name ?? this.name,
           image: image ?? this.image,

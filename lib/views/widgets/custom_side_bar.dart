@@ -1,11 +1,10 @@
-
 import 'package:admin/views/screens/category_view.dart';
 import 'package:admin/views/screens/delivery_mans.dart';
 import 'package:admin/views/screens/home_page.dart';
 import 'package:admin/views/screens/orders_screen.dart';
 import 'package:admin/views/screens/product_view.dart';
 import 'package:admin/views/screens/sellers_view.dart';
-import 'package:admin/views/screens/user_view.dart';
+import 'package:admin/views/screens/customer_view.dart';
 import 'package:flutter/material.dart';
 import 'package:sidebarx/sidebarx.dart';
 
@@ -83,7 +82,7 @@ class _CustomeSideBarState extends State<CustomeSideBar> {
               Container(
                 height: 70,
                 width: 70,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   shape: BoxShape.rectangle,
                   color: Colors.transparent,
                 ),
@@ -96,12 +95,12 @@ class _CustomeSideBarState extends State<CustomeSideBar> {
                   ),
                 ),
               ),
-              Text(
+              const Text(
                 'Admin Name',
                 style: TextStyle(
                     color: Colors.white, overflow: TextOverflow.ellipsis),
               ),
-              Text(
+              const Text(
                 'Admin@gmail.com                ',
                 style: TextStyle(
                     color: Colors.white, overflow: TextOverflow.ellipsis),
@@ -115,7 +114,7 @@ class _CustomeSideBarState extends State<CustomeSideBar> {
         SidebarXItem(label: "Categories", icon: Icons.category),
         SidebarXItem(label: "Products", icon: Icons.shop_2),
         SidebarXItem(label: "Sellers", icon: Icons.group),
-        SidebarXItem(label: "Delivery", icon: Icons.delivery_dining),
+        SidebarXItem(label: "Delivery Mans", icon: Icons.delivery_dining),
         SidebarXItem(label: "Customers", icon: Icons.person),
         SidebarXItem(label: "Orders", icon: Icons.circle),
         SidebarXItem(label: "Logout", icon: Icons.logout),
@@ -139,20 +138,20 @@ class MainScreens extends StatelessWidget {
           // final pageTitle = _getTitleByIndex(controller.selectedIndex);
           switch (controller.selectedIndex) {
             case 0:
-              return HomePageScreen();
+              return HomepageScreen();
             case 1:
               return CategoryScreen();
             case 2:
-              return ProductView();
+              return const ProductView();
             case 3:
-              return SellersView();
+              return const SellersView();
             case 4:
-              return DeliveryMansView();
+              return const DeliveryMansView();
             case 5:
-              return UserViewScreen();
+              return const CustomerViewScreen();
             case 6:
-              return OrdersScreen();
-              
+              return const OrdersScreen();
+            case 7:
             default:
               return Container();
           }
@@ -171,7 +170,7 @@ String getTitleByIndex(int index) {
     case 3:
       return 'Sellers';
     case 4:
-      return 'Delivery';
+      return 'Delivery Mans';
     case 5:
       return 'Customers';
     case 6:

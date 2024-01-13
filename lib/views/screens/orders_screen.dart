@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
-import 'dart:js';
-
+import 'package:admin/controllers/firebase_firestore_helper.dart';
+import 'package:admin/controllers/firebase_storage_helper.dart';
 import 'package:admin/provider/app_provider.dart';
 import 'package:admin/views/screens/order_list.dart';
 import 'package:flutter/material.dart';
@@ -16,14 +16,18 @@ class OrdersScreen extends StatefulWidget {
 
 class _OrdersScreenState extends State<OrdersScreen> {
   final TextEditingController _searchController = TextEditingController();
+  final FirebaseFirestoreHelper _firestoreHelper = FirebaseFirestoreHelper();
 
   Future<void> refreshOrders() async {
-    AppProvider appProvider = Provider.of<AppProvider>(
-      context as BuildContext,
-    );
-    await appProvider.getCompletedOrderList();
-    await appProvider.getPendingOrders();
-    await appProvider.getDeliveryOrders();
+    // AppProvider appProvider = Provider.of<AppProvider>(
+    //   context as BuildContext,
+    // );
+    _firestoreHelper.getOrderListStream(status: 'completed');
+    _firestoreHelper.getOrderListStream(status: 'pending');
+    _firestoreHelper.getOrderListStream(status: 'delivery');
+    // await appProvider.getCompletedOrderList();
+    // await appProvider.getPendingOrders();
+    // await appProvider.getDeliveryOrders();
   }
 
   @override
@@ -79,58 +83,3 @@ class _OrdersScreenState extends State<OrdersScreen> {
     );
   }
 }
-
-// class OrderCountIndicator extends StatelessWidget {
-//   final String title;
-//   final Color color;
-
-//   const OrderCountIndicator(
-//       {Key? key, required this.title, required this.color})
-//       : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     AppProvider appProvider = Provider.of<AppProvider>(context);
-//     int orderCount = getOrderCount(appProvider);
-
-//     return Padding(
-//       padding: const EdgeInsets.all(8.0),
-//       child: Column(
-//         mainAxisAlignment: MainAxisAlignment.center,
-//         children: [
-//           Expanded(
-//             child: CircleAvatar(
-//               backgroundColor: color,
-//               radius: 50,
-//               child: FittedBox(
-//                 child: Text(
-//                   '$orderCount',
-//                   style: const TextStyle(color: Colors.white),
-//                 ),
-//               ),
-//             ),
-//           ),
-//           // Text(
-//           //   title,
-//           //   style: const TextStyle(color: Colors.black),
-//           // ),
-//         ],
-//       ),
-//     );
-//   }
-
-//   int getOrderCount(AppProvider appProvider) {
-//     switch (title) {
-//       case 'All':
-//         return appProvider.getAllOrderList.length;
-//       case 'Pending':
-//         return appProvider.getPendingOrderList.length;
-//       case 'Completed':
-//         return appProvider.getCompletedOrder.length;
-//       case 'Delivery':
-//         return appProvider.getDeliveryOrderList.length;
-//       default:
-//         return 0;
-//     }
-//   }
-// }

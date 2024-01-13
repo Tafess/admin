@@ -2,7 +2,7 @@
 
 import 'package:admin/constants/constants.dart';
 import 'package:admin/constants/routes.dart';
-import 'package:admin/models/user_model.dart';
+import 'package:admin/models/admin_model.dart';
 import 'package:admin/views/screens/home_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -22,7 +22,7 @@ class FirebaseAuthHelper {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
 
       Routes.instance
-          .pushAndRemoveUntil(widget: const HomePageScreen(), context: context);
+          .pushAndRemoveUntil(widget: HomepageScreen(), context: context);
       Navigator.of(context).pop();
       return true;
     } on FirebaseAuthException catch (error) {
@@ -32,19 +32,35 @@ class FirebaseAuthHelper {
   }
 
   Future<bool> signUp(
-      String name, String email, String password, BuildContext context) async {
+    String firetName,
+    String middleName,
+    String lastName,
+    String email,
+    String phoneNumber,
+    String password,
+    BuildContext context,
+  ) async {
     try {
       ShowLoderDialog(context);
 
       UserCredential? userCredential = await _auth
           .createUserWithEmailAndPassword(email: email, password: password);
 
-      UserModel userModel = UserModel(
-          id: userCredential.user!.uid, name: name, email: email, image: null);
-      Routes.instance
-          .pushAndRemoveUntil(widget: const HomePageScreen(), context: context);
+      AdminModel adminModel = AdminModel(
+        id: userCredential.user!.uid,
+        firstName: firetName,
+        middleName: middleName,
+        lastName: lastName,
+        email: email,
+        phoneNumber: phoneNumber,
+        profileImage: null,
+      );
+      Routes.instance.push(widget: HomepageScreen(), context: context);
 
-      _firestore.collection('users').doc(userModel.id).set(userModel.toJson());
+      _firestore
+          .collection('admin')
+          .doc(adminModel.id)
+          .set(adminModel.toJson());
       Navigator.of(context).pop();
       return true;
     } on FirebaseAuthException catch (error) {
@@ -57,18 +73,31 @@ class FirebaseAuthHelper {
     await _auth.signOut();
   }
 
-  Future<bool> changePassword(String password, BuildContext context) async {
+  Future<bool> changePassword(
+      String oldPassword, String newPassword, BuildContext context) async {
     try {
       ShowLoderDialog(context);
 
-      _auth.currentUser!.updatePassword(password);
+      // Get the current user
+      User? user = _auth.currentUser;
+
+      // Create a credential using the user's email and password
+      AuthCredential credential = EmailAuthProvider.credential(
+          email: user!.email!, password: oldPassword);
+
+      // Reauthenticate the user with the credential
+      await user.reauthenticateWithCredential(credential);
+
+      // Update the password
+      await user.updatePassword(newPassword);
 
       Navigator.of(context, rootNavigator: true).pop();
       showMessage('Password changed');
       Navigator.of(context).pop();
       return true;
     } on FirebaseAuthException catch (error) {
-      showMessage(error.code.toString());
+      Navigator.of(context, rootNavigator: true).pop();
+      showMessage(error.message!);
       return false;
     }
   }

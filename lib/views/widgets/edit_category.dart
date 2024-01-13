@@ -42,14 +42,11 @@ class _EditCategoryScreenState extends State<EditCategoryScreen> {
                 widget.categoryData['image'],
               ),
             ),
-
             TextFormField(
               controller: _nameController,
               decoration: InputDecoration(labelText: 'Category Name'),
             ),
-
             SizedBox(height: 16),
-
             ElevatedButton(
               onPressed: () {
                 _updateCategory();
@@ -184,7 +181,7 @@ class _EditCategoryScreenState extends State<EditCategoryScreen> {
 //                     }
 //                     Navigator.of(context).pop();
 //                     //   appProvider.updateUserInfoFirebase(
-//                     //   context, userModel, image);
+//                     //   context, customerModel, image);
 //                   },
 //                   title: 'Update'))
 //         ],
