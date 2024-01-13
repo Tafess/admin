@@ -13,6 +13,7 @@
             "args": ["-d", "chrome", "--web-renderer", "html"],
             "flutterMode": "debug",
         },
+        
         {
             "name": "admin (profile mode)",
             "request": "launch",

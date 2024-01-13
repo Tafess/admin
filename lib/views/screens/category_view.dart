@@ -52,7 +52,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
     if (_formKey.currentState!.validate()) {
       String imageUrl = await uploadCategoryImageToStorage(_image!);
       String docId = _firestore.collection('categories').doc().id;
-      await _firestore.collection('categories').doc(docId).set(
+      await _firestore.collection('categories').doc().set(
         {
           'id': docId,
           'image': imageUrl,

@@ -3,7 +3,6 @@
 import 'package:admin/constants/theme.dart';
 import 'package:admin/firebase_options.dart';
 import 'package:admin/provider/app_provider.dart';
-
 import 'package:admin/views/screens/dashboard_screen.dart';
 import 'package:admin/views/widgets/custom_side_bar.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -47,7 +46,33 @@ class _MyAppState extends State<MyApp> {
               appBar: AppBar(
                 backgroundColor: Colors.green.shade300,
                 automaticallyImplyLeading: false,
+                titleTextStyle: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 30),
+                titleSpacing: 3,
                 title: Text(getTitleByIndex(_controller.selectedIndex)),
+                actions: [
+                  PopupMenuButton<String>(
+                    icon: Icon(Icons.more_vert, color: Colors.white),
+                    onSelected: (value) {
+                      if (value == 'logout') {
+                      } else if (value == 'darkMode') {}
+                    },
+                    itemBuilder: (BuildContext context) {
+                      return [
+                        PopupMenuItem<String>(
+                          value: 'logout',
+                          child: Text('Logout'),
+                        ),
+                        PopupMenuItem<String>(
+                          value: 'darkMode',
+                          child: Text('Dark Mode'),
+                        ),
+                      ];
+                    },
+                  )
+                ],
               ),
               drawer: CustomeSideBar(controller: _controller),
               body: Expanded(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 ThemeData themeData = ThemeData(
-  scaffoldBackgroundColor: Colors.white,
+ // scaffoldBackgroundColor: Colors.white,
   primaryColor: Colors.blue,
   primarySwatch: Colors.green,
   canvasColor: Colors.red,

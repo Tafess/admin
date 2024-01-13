@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:admin/controllers/firebase_firestore_helper.dart';
 import 'package:admin/models/seller_model.dart';
+import 'package:touch_mouse_behavior/touch_mouse_behavior.dart';
 
 class DeliveryMansView extends StatefulWidget {
   const DeliveryMansView({Key? key}) : super(key: key);
@@ -217,268 +218,273 @@ class _DeliveryMansViewState extends State<DeliveryMansView>
               scrollDirection: Axis.vertical,
               child: Column(
                 children: [
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: DataTable(
-                      headingRowColor: MaterialStateColor.resolveWith(
-                          (states) => Colors.grey.shade700),
-                      showCheckboxColumn: false,
-                      columnSpacing: 100,
-                      dataTextStyle: TextStyle(fontFamily: 'Normal'),
-                      columns: const [
-                        DataColumn(
-                            label: Text(
-                          'Permission',
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
-                        )),
-                        DataColumn(
-                            label: Text(
-                          'Image',
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
-                        )),
-                        DataColumn(
-                            label: Text(
-                          'Id',
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
-                        )),
-                        DataColumn(
-                            label: Text('First Name',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold))),
-                        DataColumn(
-                            label: Text('Middle Name',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold))),
-                        DataColumn(
-                            label: Text('Last Name',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold))),
-                        DataColumn(
-                            label: Text('Phone Number',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold))),
-                        DataColumn(
-                            label: Text('Email',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold))),
-                        DataColumn(
-                            label: Text('Country',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold))),
-                        DataColumn(
-                            label: Text('Region',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold))),
-                        DataColumn(
-                            label: Text('City',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold))),
-                        DataColumn(
-                            label: Text('Zone',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold))),
-                        DataColumn(
-                            label: Text('Woreda',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold))),
-                        DataColumn(
-                            label: Text('Kebele',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold))),
-                      ],
-                      rows: filteredSellers.asMap().entries.map((entry) {
-                        final int rowIndex = entry.key;
-                        final SellerModel seller = entry.value;
-                        return DataRow(
-                          color: MaterialStateColor.resolveWith((states) =>
-                              rowIndex % 2 == 0
-                                  ? Colors.grey.shade300
-                                  : Colors.white),
-                          cells: [
-                            DataCell(
-                              Container(
-                                width: 100,
-                                alignment: Alignment.center,
-                                child: ElevatedButton(
-                                  onPressed: () async {
-                                    if (seller.approved == false) {
-                                      setState(() {
-                                        seller.approved = true;
-                                      });
-                                    } else {
-                                      setState(() {
-                                        seller.approved = false;
-                                      });
-                                    }
+                  TouchMouseScrollable(
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: DataTable(
+                        headingRowColor: MaterialStateColor.resolveWith(
+                            (states) => Colors.grey.shade700),
+                        showCheckboxColumn: false,
+                        columnSpacing: 100,
+                        dataTextStyle: TextStyle(fontFamily: 'Normal'),
+                        columns: const [
+                          DataColumn(
+                              label: Text(
+                            'Permission',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          )),
+                          DataColumn(
+                              label: Text(
+                            'Image',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          )),
+                          DataColumn(
+                              label: Text(
+                            'Id',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          )),
+                          DataColumn(
+                              label: Text('First Name',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold))),
+                          DataColumn(
+                              label: Text('Middle Name',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold))),
+                          DataColumn(
+                              label: Text('Last Name',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold))),
+                          DataColumn(
+                              label: Text('Phone Number',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold))),
+                          DataColumn(
+                              label: Text('Email',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold))),
+                          DataColumn(
+                              label: Text('Country',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold))),
+                          DataColumn(
+                              label: Text('Region',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold))),
+                          DataColumn(
+                              label: Text('City',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold))),
+                          DataColumn(
+                              label: Text('Zone',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold))),
+                          DataColumn(
+                              label: Text('Woreda',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold))),
+                          DataColumn(
+                              label: Text('Kebele',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold))),
+                        ],
+                        rows: filteredSellers.asMap().entries.map((entry) {
+                          final int rowIndex = entry.key;
+                          final SellerModel seller = entry.value;
+                          return DataRow(
+                            color: MaterialStateColor.resolveWith((states) =>
+                                rowIndex % 2 == 0
+                                    ? Colors.grey.shade300
+                                    : Colors.white),
+                            cells: [
+                              DataCell(
+                                Container(
+                                  width: 100,
+                                  alignment: Alignment.center,
+                                  child: ElevatedButton(
+                                    onPressed: () async {
+                                      if (seller.approved == false) {
+                                        setState(() {
+                                          seller.approved = true;
+                                        });
+                                      } else {
+                                        setState(() {
+                                          seller.approved = false;
+                                        });
+                                      }
 
-                                    await FirebaseFirestoreHelper.instance
-                                        .updateSeller(seller);
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.white,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(4),
-                                    ),
-                                  ),
-                                  child: Text(
-                                    seller.approved == false
-                                        ? 'Accept'
-                                        : 'Reject',
-                                    style: TextStyle(
-                                      color: seller.approved == false
-                                          ? Colors.green
-                                          : Colors.red,
-                                      overflow: TextOverflow.ellipsis,
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            DataCell(
-                              seller.image == null
-                                  ? CircleAvatar(
-                                      radius: 20,
-                                      child: Icon(Icons.person),
-                                    )
-                                  : CircleAvatar(
-                                      radius: 20,
-                                      child: ClipOval(
-                                        child: Image.network(
-                                          seller.image!,
-                                          fit: BoxFit.cover,
-                                        ),
+                                      await FirebaseFirestoreHelper.instance
+                                          .updateSeller(seller);
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.white,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(4),
                                       ),
                                     ),
-                            ),
-                            DataCell(
-                              Container(
-                                child: Text(
-                                  seller.id ?? '',
-                                  style: const TextStyle(
-                                      fontSize: 14, color: Colors.black),
+                                    child: Text(
+                                      seller.approved == false
+                                          ? 'Accept'
+                                          : 'Reject',
+                                      style: TextStyle(
+                                        color: seller.approved == false
+                                            ? Colors.green
+                                            : Colors.red,
+                                        overflow: TextOverflow.ellipsis,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
-                            DataCell(
-                              Container(
-                                child: Text(
-                                  seller.firstName ?? '',
-                                  style: const TextStyle(
-                                      fontSize: 14, color: Colors.black),
+                              DataCell(
+                                seller.image == null
+                                    ? CircleAvatar(
+                                        radius: 20,
+                                        child: Icon(Icons.person),
+                                      )
+                                    : CircleAvatar(
+                                        radius: 20,
+                                        child: ClipOval(
+                                          child: Image.network(
+                                            seller.image!,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                              ),
+                              DataCell(
+                                Container(
+                                  child: Text(
+                                    seller.id ?? '',
+                                    style: const TextStyle(
+                                        fontSize: 14, color: Colors.black),
+                                  ),
                                 ),
                               ),
-                            ),
-                            DataCell(
-                              Container(
-                                child: Text(
-                                  seller.middleName ?? '',
-                                  style: const TextStyle(
-                                      fontSize: 14, color: Colors.black),
+                              DataCell(
+                                Container(
+                                  child: Text(
+                                    seller.firstName ?? '',
+                                    style: const TextStyle(
+                                        fontSize: 14, color: Colors.black),
+                                  ),
                                 ),
                               ),
-                            ),
-                            DataCell(
-                              Container(
-                                child: Text(
-                                  seller.lastName ?? '',
-                                  style: const TextStyle(
-                                      fontSize: 14, color: Colors.black),
+                              DataCell(
+                                Container(
+                                  child: Text(
+                                    seller.middleName ?? '',
+                                    style: const TextStyle(
+                                        fontSize: 14, color: Colors.black),
+                                  ),
                                 ),
                               ),
-                            ),
-                            DataCell(
-                              Container(
-                                child: Text(
-                                  seller.phoneNumber ?? '',
-                                  style: const TextStyle(
-                                      fontSize: 14, color: Colors.black),
+                              DataCell(
+                                Container(
+                                  child: Text(
+                                    seller.lastName ?? '',
+                                    style: const TextStyle(
+                                        fontSize: 14, color: Colors.black),
+                                  ),
                                 ),
                               ),
-                            ),
-                            DataCell(
-                              Container(
-                                child: Text(
-                                  seller.email ?? '',
-                                  style: const TextStyle(
-                                      fontSize: 14, color: Colors.black),
+                              DataCell(
+                                Container(
+                                  child: Text(
+                                    seller.phoneNumber ?? '',
+                                    style: const TextStyle(
+                                        fontSize: 14, color: Colors.black),
+                                  ),
                                 ),
                               ),
-                            ),
-                            DataCell(
-                              Container(
-                                child: Text(
-                                  seller.country ?? '',
-                                  style: const TextStyle(
-                                      fontSize: 14, color: Colors.black),
+                              DataCell(
+                                Container(
+                                  child: Text(
+                                    seller.email ?? '',
+                                    style: const TextStyle(
+                                        fontSize: 14, color: Colors.black),
+                                  ),
                                 ),
                               ),
-                            ),
-                            DataCell(
-                              Container(
-                                child: Text(
-                                  seller.region ?? '',
-                                  style: const TextStyle(
-                                      fontSize: 14, color: Colors.black),
+                              DataCell(
+                                Container(
+                                  child: Text(
+                                    seller.country ?? '',
+                                    style: const TextStyle(
+                                        fontSize: 14, color: Colors.black),
+                                  ),
                                 ),
                               ),
-                            ),
-                            DataCell(
-                              Container(
-                                child: Text(
-                                  seller.city ?? '',
-                                  style: const TextStyle(
-                                      fontSize: 14, color: Colors.black),
+                              DataCell(
+                                Container(
+                                  child: Text(
+                                    seller.region ?? '',
+                                    style: const TextStyle(
+                                        fontSize: 14, color: Colors.black),
+                                  ),
                                 ),
                               ),
-                            ),
-                            DataCell(
-                              Container(
-                                child: Text(
-                                  seller.zone ?? '',
-                                  style: const TextStyle(
-                                      fontSize: 14, color: Colors.black),
+                              DataCell(
+                                Container(
+                                  child: Text(
+                                    seller.city ?? '',
+                                    style: const TextStyle(
+                                        fontSize: 14, color: Colors.black),
+                                  ),
                                 ),
                               ),
-                            ),
-                            DataCell(
-                              Container(
-                                child: Text(
-                                  seller.woreda ?? '',
-                                  style: const TextStyle(
-                                      fontSize: 14, color: Colors.black),
+                              DataCell(
+                                Container(
+                                  child: Text(
+                                    seller.zone ?? '',
+                                    style: const TextStyle(
+                                        fontSize: 14, color: Colors.black),
+                                  ),
                                 ),
                               ),
-                            ),
-                            DataCell(
-                              Container(
-                                child: Text(
-                                  seller.kebele ?? '',
-                                  style: const TextStyle(
-                                      fontSize: 14, color: Colors.black),
+                              DataCell(
+                                Container(
+                                  child: Text(
+                                    seller.woreda ?? '',
+                                    style: const TextStyle(
+                                        fontSize: 14, color: Colors.black),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                          onSelectChanged: (selected) {
-                            showSellerDetailsDialog(seller);
-                          },
-                        );
-                      }).toList(),
+                              DataCell(
+                                Container(
+                                  child: Text(
+                                    seller.kebele ?? '',
+                                    style: const TextStyle(
+                                        fontSize: 14, color: Colors.black),
+                                  ),
+                                ),
+                              ),
+                            ],
+                            onSelectChanged: (selected) {
+                              showSellerDetailsDialog(seller);
+                            },
+                          );
+                        }).toList(),
+                      ),
                     ),
                   ),
                 ],
@@ -494,7 +500,7 @@ Stream<List<SellerModel>> getSellersStream({bool? approved, String? role}) {
   if (approved != null) {
     query = query.where('approved', isEqualTo: approved);
   }
-  
+
   if (role != null) {
     query = query.where('role', isEqualTo: role);
   }
