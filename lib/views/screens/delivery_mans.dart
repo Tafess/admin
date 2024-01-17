@@ -129,18 +129,6 @@ class _DeliveryMansViewState extends State<DeliveryMansView>
                           ),
                         ),
                 ),
-                Container(
-                  color: Colors.white,
-                  height: 30,
-                  alignment: Alignment.center,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Text('Primary Information'),
-                      Text('Address Information'),
-                    ],
-                  ),
-                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -192,9 +180,9 @@ class _DeliveryMansViewState extends State<DeliveryMansView>
     );
   }
 
-  Widget buildDeliveryDataTable(Stream<List<EmployeeModel>> sellersStream) {
+  Widget buildDeliveryDataTable(Stream<List<EmployeeModel>> employeeStream) {
     return StreamBuilder<List<EmployeeModel>>(
-        stream: sellersStream,
+        stream: employeeStream,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -205,15 +193,15 @@ class _DeliveryMansViewState extends State<DeliveryMansView>
                 child: Center(
                     child: const Text('No delivery man data available')));
           } else {
-            List<EmployeeModel> filteredSellers = snapshot.data!
-                .where((seller) =>
-                    seller.firstName!
+            List<EmployeeModel> filteredEmployee = snapshot.data!
+                .where((employee) =>
+                    employee.firstName!
                         .toLowerCase()
                         .contains(_searchController.text.toLowerCase()) ||
-                    seller.middleName!
+                    employee.middleName!
                         .toLowerCase()
                         .contains(_searchController.text.toLowerCase()) ||
-                    seller.lastName!
+                    employee.lastName!
                         .toLowerCase()
                         .contains(_searchController.text.toLowerCase()))
                 .toList();
@@ -240,14 +228,14 @@ class _DeliveryMansViewState extends State<DeliveryMansView>
                           )),
                           DataColumn(
                               label: Text(
-                            'Image',
+                            'National Id',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold),
                           )),
                           DataColumn(
                               label: Text(
-                            'Id',
+                            'Profile',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold),
@@ -308,9 +296,9 @@ class _DeliveryMansViewState extends State<DeliveryMansView>
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold))),
                         ],
-                        rows: filteredSellers.asMap().entries.map((entry) {
+                        rows: filteredEmployee.asMap().entries.map((entry) {
                           final int rowIndex = entry.key;
-                          final EmployeeModel seller = entry.value;
+                          final EmployeeModel employee = entry.value;
                           return DataRow(
                             color: MaterialStateColor.resolveWith((states) =>
                                 rowIndex % 2 == 0
@@ -323,18 +311,18 @@ class _DeliveryMansViewState extends State<DeliveryMansView>
                                   alignment: Alignment.center,
                                   child: ElevatedButton(
                                     onPressed: () async {
-                                      if (seller.approved == false) {
+                                      if (employee.approved == false) {
                                         setState(() {
-                                          seller.approved = true;
+                                          employee.approved = true;
                                         });
                                       } else {
                                         setState(() {
-                                          seller.approved = false;
+                                          employee.approved = false;
                                         });
                                       }
 
                                       await FirebaseFirestoreHelper.instance
-                                          .updateEmployee(seller);
+                                          .updateEmployee(employee);
                                     },
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: Colors.white,
@@ -343,11 +331,11 @@ class _DeliveryMansViewState extends State<DeliveryMansView>
                                       ),
                                     ),
                                     child: Text(
-                                      seller.approved == false
+                                      employee.approved == false
                                           ? 'Accept'
                                           : 'Reject',
                                       style: TextStyle(
-                                        color: seller.approved == false
+                                        color: employee.approved == false
                                             ? Colors.green
                                             : Colors.red,
                                         overflow: TextOverflow.ellipsis,
@@ -358,7 +346,7 @@ class _DeliveryMansViewState extends State<DeliveryMansView>
                                 ),
                               ),
                               DataCell(
-                                seller.idCard == null
+                                employee.idCard == null
                                     ? CircleAvatar(
                                         radius: 20,
                                         child: Icon(Icons.person),
@@ -367,7 +355,23 @@ class _DeliveryMansViewState extends State<DeliveryMansView>
                                         radius: 20,
                                         child: ClipOval(
                                           child: Image.network(
-                                            seller.idCard!,
+                                            employee.idCard!,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                              ),
+                              DataCell(
+                                employee.profile == null
+                                    ? CircleAvatar(
+                                        radius: 20,
+                                        child: Icon(Icons.person),
+                                      )
+                                    : CircleAvatar(
+                                        radius: 20,
+                                        child: ClipOval(
+                                          child: Image.network(
+                                            employee.profile!,
                                             fit: BoxFit.cover,
                                           ),
                                         ),
@@ -376,7 +380,7 @@ class _DeliveryMansViewState extends State<DeliveryMansView>
                               DataCell(
                                 Container(
                                   child: Text(
-                                    seller.idCard ?? '',
+                                    employee.firstName ?? '',
                                     style: const TextStyle(
                                         fontSize: 14, color: Colors.black),
                                   ),
@@ -385,7 +389,7 @@ class _DeliveryMansViewState extends State<DeliveryMansView>
                               DataCell(
                                 Container(
                                   child: Text(
-                                    seller.firstName ?? '',
+                                    employee.middleName ?? '',
                                     style: const TextStyle(
                                         fontSize: 14, color: Colors.black),
                                   ),
@@ -394,7 +398,7 @@ class _DeliveryMansViewState extends State<DeliveryMansView>
                               DataCell(
                                 Container(
                                   child: Text(
-                                    seller.middleName ?? '',
+                                    employee.lastName ?? '',
                                     style: const TextStyle(
                                         fontSize: 14, color: Colors.black),
                                   ),
@@ -403,7 +407,7 @@ class _DeliveryMansViewState extends State<DeliveryMansView>
                               DataCell(
                                 Container(
                                   child: Text(
-                                    seller.lastName ?? '',
+                                    employee.phoneNumber ?? '',
                                     style: const TextStyle(
                                         fontSize: 14, color: Colors.black),
                                   ),
@@ -412,7 +416,7 @@ class _DeliveryMansViewState extends State<DeliveryMansView>
                               DataCell(
                                 Container(
                                   child: Text(
-                                    seller.phoneNumber ?? '',
+                                    employee.email ?? '',
                                     style: const TextStyle(
                                         fontSize: 14, color: Colors.black),
                                   ),
@@ -421,7 +425,7 @@ class _DeliveryMansViewState extends State<DeliveryMansView>
                               DataCell(
                                 Container(
                                   child: Text(
-                                    seller.email ?? '',
+                                    employee.country ?? '',
                                     style: const TextStyle(
                                         fontSize: 14, color: Colors.black),
                                   ),
@@ -430,7 +434,7 @@ class _DeliveryMansViewState extends State<DeliveryMansView>
                               DataCell(
                                 Container(
                                   child: Text(
-                                    seller.country ?? '',
+                                    employee.region ?? '',
                                     style: const TextStyle(
                                         fontSize: 14, color: Colors.black),
                                   ),
@@ -439,7 +443,7 @@ class _DeliveryMansViewState extends State<DeliveryMansView>
                               DataCell(
                                 Container(
                                   child: Text(
-                                    seller.region ?? '',
+                                    employee.city ?? '',
                                     style: const TextStyle(
                                         fontSize: 14, color: Colors.black),
                                   ),
@@ -448,7 +452,7 @@ class _DeliveryMansViewState extends State<DeliveryMansView>
                               DataCell(
                                 Container(
                                   child: Text(
-                                    seller.city ?? '',
+                                    employee.zone ?? '',
                                     style: const TextStyle(
                                         fontSize: 14, color: Colors.black),
                                   ),
@@ -457,7 +461,7 @@ class _DeliveryMansViewState extends State<DeliveryMansView>
                               DataCell(
                                 Container(
                                   child: Text(
-                                    seller.zone ?? '',
+                                    employee.woreda ?? '',
                                     style: const TextStyle(
                                         fontSize: 14, color: Colors.black),
                                   ),
@@ -466,16 +470,7 @@ class _DeliveryMansViewState extends State<DeliveryMansView>
                               DataCell(
                                 Container(
                                   child: Text(
-                                    seller.woreda ?? '',
-                                    style: const TextStyle(
-                                        fontSize: 14, color: Colors.black),
-                                  ),
-                                ),
-                              ),
-                              DataCell(
-                                Container(
-                                  child: Text(
-                                    seller.kebele ?? '',
+                                    employee.kebele ?? '',
                                     style: const TextStyle(
                                         fontSize: 14, color: Colors.black),
                                   ),
@@ -483,7 +478,7 @@ class _DeliveryMansViewState extends State<DeliveryMansView>
                               ),
                             ],
                             onSelectChanged: (selected) {
-                              showDeliveryDetailsDialog(seller);
+                              showDeliveryDetailsDialog(employee);
                             },
                           );
                         }).toList(),

@@ -1,13 +1,10 @@
-// ignore_for_file: prefer_const_constructors, use_build_context_synchronously
-
-import 'package:admin/constants/custom_snackbar.dart';
-import 'package:admin/constants/custome_button.dart';
-import 'package:admin/constants/routes.dart';
-import 'package:admin/constants/custom_text.dart';
-import 'package:admin/views/screens/main_app_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:admin/constants/custom_snackbar.dart';
+import 'package:admin/constants/custome_button.dart';
+import 'package:admin/constants/custom_text.dart';
+import 'package:admin/views/screens/main_app_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -28,75 +25,95 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black26,
+      backgroundColor: Colors.grey.shade200,
       appBar: AppBar(
-          backgroundColor: Colors.blue.shade300,
-          centerTitle: true,
-          title: text(
-              title:
-                  'Welcome to Belkis marketplace Login with your account to continue ',
-              color: Colors.white)),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Expanded(
-          child: Row(
+        backgroundColor: Colors.blue.shade300,
+        centerTitle: true,
+        title: text(
+            title: 'WELCOME TO BELKIS ONLINE MARKTPLACE',
+            size: 24,
+            color: Colors.white),
+      ),
+      body: Center(
+        child: Container(
+          width: MediaQuery.of(context).size.width / 2,
+          padding: const EdgeInsets.all(20.0),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10.0),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.shade300,
+                blurRadius: 10,
+                spreadRadius: 3,
+              ),
+            ],
+          ),
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
-                color: Colors.white,
-                margin: EdgeInsets.symmetric(horizontal: 300, vertical: 8),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 50.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(height: 16.0),
-                      Container(
-                          height: 150,
-                          width: 600,
-                          child: Image.asset('assets/images/shopMouse.jpg')),
-                      SizedBox(height: 16.0),
-                      TextField(
-                        controller: _emailController,
-                        decoration: InputDecoration(
-                          labelText: 'Email',
-                        ),
-                      ),
-                      SizedBox(height: 16.0),
-                      TextField(
-                        controller: _passwordController,
-                        decoration: InputDecoration(
-                          labelText: 'Password',
-                        ),
-                        obscureText: true,
-                      ),
-                      SizedBox(height: 16.0),
-                      CustomButton(
-                        onPressed: () async {
-                          if (_emailController.text.isEmpty) {
-                            customSnackbar(
-                                context: context,
-                                message: 'Please enter your email address');
-                          } else if (_passwordController.text.isEmpty) {
-                            customSnackbar(
-                                context: context,
-                                message: 'Please enter your password');
-                          } else {
-                            await _signInWithEmailAndPassword();
-                          }
-                        },
-                        title: 'Login',
-                      ),
-                      SizedBox(height: 16.0),
-                      Text(
-                        _errorText,
-                        style: TextStyle(color: Colors.red),
-                      ),
-                    ],
-                  ),
+              Image.asset(
+                'assets/images/belkis1.jpg',
+                height: 150,
+              ),
+              SizedBox(height: 20.0),
+              TextField(
+                controller: _emailController,
+                decoration: InputDecoration(
+                  labelText: 'Email',
+                  border: OutlineInputBorder(),
                 ),
+              ),
+              SizedBox(height: 16.0),
+              TextField(
+                controller: _passwordController,
+                decoration: InputDecoration(
+                  labelText: 'Password',
+                  border: OutlineInputBorder(),
+                ),
+                obscureText: true,
+              ),
+              SizedBox(height: 20.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  InkWell(
+                    onTap: () {
+                      _sendPasswordResetEmail();
+                    },
+                    child: Text(
+                      'Forgot Password?',
+                      style: TextStyle(color: Colors.blue),
+                    ),
+                  ),
+                  SizedBox(width: 8.0),
+                  Expanded(
+                    child: CustomButton(
+                      onPressed: () async {
+                        if (_emailController.text.isEmpty) {
+                          customSnackbar(
+                            context: context,
+                            message: 'Please enter your email address',
+                          );
+                        } else if (_passwordController.text.isEmpty) {
+                          customSnackbar(
+                            context: context,
+                            message: 'Please enter your password',
+                          );
+                        } else {
+                          await _signInWithEmailAndPassword();
+                        }
+                      },
+                      title: 'Login',
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 16.0),
+              Text(
+                _errorText,
+                style: TextStyle(color: Colors.red),
               ),
             ],
           ),
@@ -116,22 +133,30 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (isAdmin) {
         customSnackbar(
-            context: context,
-            message: 'You are successfully logged in',
-            backgroundColor: Colors.green.shade300);
+          context: context,
+          message: 'You are successfully logged in',
+          backgroundColor: Colors.green.shade300,
+        );
 
-        Routes.instance
-            .pushAndRemoveUntil(widget: MainAppScreen(), context: context);
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => MainAppScreen()),
+          (route) => false,
+        );
       } else {
         customSnackbar(
-            context: context, message: 'You are not authorized as an admin');
+          context: context,
+          message: 'You are not authorized as an admin',
+        );
         setState(() {
           _errorText = 'You are not authorized as an admin.';
         });
       }
     } on FirebaseAuthException catch (e) {
       customSnackbar(
-          context: context, message: 'Some eror is occured Try again');
+        context: context,
+        message: 'Some error occurred. Try again',
+      );
       setState(() {
         _errorText = e.message ?? 'An error occurred';
       });
@@ -147,6 +172,22 @@ class _LoginScreenState extends State<LoginScreen> {
     } catch (e) {
       print(e);
       return false;
+    }
+  }
+
+  Future<void> _sendPasswordResetEmail() async {
+    try {
+      await _auth.sendPasswordResetEmail(email: _emailController.text);
+      customSnackbar(
+        context: context,
+        message: 'Password reset email sent. Check your email.',
+        backgroundColor: Colors.green.shade300,
+      );
+    } on FirebaseAuthException catch (e) {
+      customSnackbar(
+        context: context,
+        message: 'Failed to send password reset email. ${e.message}',
+      );
     }
   }
 }

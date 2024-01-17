@@ -143,7 +143,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 ),
                 SizedBox(height: 12),
                 SizedBox(height: 16),
-                ElevatedButton(
+                CustomButton(
                   onPressed: () async {
                     if (_formKey.currentState?.validate() ?? false) {
                       try {
@@ -156,16 +156,22 @@ class _SignupScreenState extends State<SignupScreen> {
                           password.text,
                           context,
                         );
+                        Navigator.of(context, rootNavigator: true).pop();
                         customSnackbar(
-                          context: context,
-                          message: 'Successfully Created ',
-                        );
+                            context: context,
+                            message: 'Successfully Created ',
+                            backgroundColor: Colors.green.shade300);
                       } catch (e) {
+                        Navigator.of(context, rootNavigator: true).pop();
+                        customSnackbar(
+                            context: context,
+                            message: e.toString(),
+                            backgroundColor: Colors.green.shade300);
                         print(e.toString());
                       }
                     }
                   },
-                  child: Text('Create Admin Account'),
+                  title: 'Create Admin Account',
                 ),
               ],
             ),

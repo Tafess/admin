@@ -3,6 +3,7 @@
 import 'package:admin/constants/routes.dart';
 import 'package:admin/views/screens/change_password.dart';
 import 'package:admin/views/screens/dashboard_screen.dart';
+import 'package:admin/views/screens/login_screen.dart';
 import 'package:admin/views/screens/sign_up_screen.dart';
 import 'package:admin/views/widgets/custom_side_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -26,7 +27,8 @@ class _MainAppScreenState extends State<MainAppScreen> {
         return Scaffold(
           key: _key,
           appBar: AppBar(
-            backgroundColor: Colors.green.shade300,
+            elevation: 10,
+            backgroundColor: Colors.green.shade400,
             automaticallyImplyLeading: false,
             titleTextStyle: TextStyle(
                 color: Colors.white, fontWeight: FontWeight.bold, fontSize: 30),
@@ -39,10 +41,12 @@ class _MainAppScreenState extends State<MainAppScreen> {
                   if (value == 'Signup') {
                     Routes.instance
                         .push(widget: SignupScreen(), context: context);
-                  } else if (value == 'darkMode') {
-                    Routes.instance.push(widget: ChangePasswordScreen(), context: context);
+                  } else if (value == 'changePassword') {
+                    Routes.instance
+                        .push(widget: ChangePasswordScreen(), context: context);
                   } else if (value == 'logout') {
-                    FirebaseAuth.instance.signOut();
+                    Routes.instance.pushAndRemoveUntil(
+                        widget: LoginScreen(), context: context);
                   }
                 },
                 itemBuilder: (BuildContext context) {
@@ -56,8 +60,8 @@ class _MainAppScreenState extends State<MainAppScreen> {
                       child: Text('Logout'),
                     ),
                     PopupMenuItem<String>(
-                      value: 'darkMode',
-                      child: Text('Dark Mode'),
+                      value: 'changePassword',
+                      child: Text('Change Password'),
                     ),
                   ];
                 },

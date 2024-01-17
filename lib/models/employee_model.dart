@@ -10,7 +10,7 @@ class EmployeeModel {
   String? idCard;
   bool approved;
   String role;
-  String? employeeId;
+  String employeeId;
   String? firstName;
   String? middleName;
   String? lastName;
@@ -28,7 +28,7 @@ class EmployeeModel {
     this.idCard,
     required this.approved,
     required this.role,
-    this.employeeId,
+    required this.employeeId,
     this.firstName,
     this.middleName,
     this.lastName,
@@ -47,7 +47,7 @@ class EmployeeModel {
         idCard: json['idCard'],
         approved: json['approved'],
         role: json['role'],
-        employeeId: json['id'],
+        employeeId: json['employeeId'],
         firstName: json['firstName'],
         middleName: json['middleName'],
         lastName: json['lastName'],

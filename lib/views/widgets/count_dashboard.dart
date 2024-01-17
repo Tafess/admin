@@ -258,7 +258,7 @@ class _TotalCountsState extends State<TotalCounts> {
               scrollDirection: Axis.horizontal,
               physics: ScrollPhysics(),
               child: Container(
-                color: Colors.blue.shade400,
+                color: Colors.green.shade300,
                 height: 100,
                 width: MediaQuery.of(context).size.width,
                 child: Flexible(
@@ -328,58 +328,3 @@ class _TotalCountsState extends State<TotalCounts> {
   }
 }
 
-
-  // Flexible(
-                      //   child: SingleDashItem(
-                      //     onPressed: () {
-                      //       _showUserInfoDialog(
-                      //         context: context,
-                      //         icon: Icons.verified_user_outlined,
-                      //         title: 'Users',
-                      //         subtitle: widget.appProvider.getUserList.length
-                      //             .toString(),
-                      //       );
-                      //     },
-                      //     icon: Icons.verified_user_outlined,
-                      //     title: 'Users',
-                      //     subtitle:
-                      //         widget.appProvider.getUserList.length.toString(),
-                      //   ),
-                      // ),
-                      // Flexible(
-                      //   child: SingleDashItem(
-                      //     onPressed: () {
-                      //       _showUserInfoDialog(
-                      //         context: context,
-                      //         icon: Icons.category,
-                      //         title: 'Categories',
-                      //         subtitle: widget
-                      //             .appProvider.getCategoryList.length
-                      //             .toString(),
-                      //       );
-                      //     },
-                      //     icon: Icons.category,
-                      //     title: 'Categories',
-                      //     subtitle: widget.appProvider.getCategoryList.length
-                      //         .toString(),
-                      //   ),
-                      // ),
-                      // Flexible(
-                      //   child: SingleDashItem(
-                      //     onPressed: () {
-                      //       _showUserInfoDialog(
-                      //         context: context,
-                      //         icon: Icons.shop_2,
-                      //         title: 'Products',
-                      //         subtitle: widget.appProvider.getProducts.length
-                      //             .toString(),
-                      //       );
-                      //     },
-                      //     icon: Icons.shop_2,
-                      //     title: 'Products',
-                      //     subtitle:
-                      //         widget.appProvider.getProducts.length.toString(),
-                      //   ),
-                      // ),
-
-                   

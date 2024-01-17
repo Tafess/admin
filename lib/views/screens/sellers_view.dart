@@ -236,14 +236,14 @@ class _SellersViewState extends State<SellersView>
                           )),
                           DataColumn(
                               label: Text(
-                            'Image',
+                            'National Id',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold),
                           )),
                           DataColumn(
                               label: Text(
-                            'Id',
+                            'Profile',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold),
@@ -370,13 +370,20 @@ class _SellersViewState extends State<SellersView>
                                       ),
                               ),
                               DataCell(
-                                Container(
-                                  child: Text(
-                                    seller.employeeId ?? '',
-                                    style: const TextStyle(
-                                        fontSize: 14, color: Colors.black),
-                                  ),
-                                ),
+                                seller.profile == null
+                                    ? CircleAvatar(
+                                        radius: 20,
+                                        child: Icon(Icons.person),
+                                      )
+                                    : CircleAvatar(
+                                        radius: 20,
+                                        child: ClipOval(
+                                          child: Image.network(
+                                            seller.profile!,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
                               ),
                               DataCell(
                                 Container(
@@ -493,21 +500,3 @@ class _SellersViewState extends State<SellersView>
         });
   }
 }
-
-// Stream<List<EmployeeModel>> getEmployeesStream({bool? approved, String? role}) {
-//   Query query = FirebaseFirestore.instance.collection('employees');
-//   if (approved != null) {
-//     query = query.where('approved', isEqualTo: approved);
-//   }
-
-//   if (role != null) {
-//     query = query.where('role', isEqualTo: role);
-//   }
-//   return query.snapshots().map((querySnapshot) {
-//     List<EmployeeModel> employeeModels = querySnapshot.docs
-//         .map(
-//             (doc) => EmployeeModel.fromJson(doc.data() as Map<String, dynamic>))
-//         .toList();
-//     return employeeModels;
-//   });
-// }

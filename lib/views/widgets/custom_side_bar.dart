@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:admin/views/screens/category_view.dart';
 import 'package:admin/views/screens/delivery_mans.dart';
 import 'package:admin/views/screens/home_page.dart';
@@ -7,6 +9,7 @@ import 'package:admin/views/screens/sellers_view.dart';
 import 'package:admin/views/screens/customer_view.dart';
 import 'package:flutter/material.dart';
 import 'package:sidebarx/sidebarx.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class CustomeSideBar extends StatefulWidget {
   const CustomeSideBar({
@@ -24,6 +27,8 @@ class CustomeSideBar extends StatefulWidget {
 class _CustomeSideBarState extends State<CustomeSideBar> {
   @override
   Widget build(BuildContext context) {
+    User? currentUser = FirebaseAuth.instance.currentUser;
+
     return SidebarX(
       controller: widget._controller,
       theme: SidebarXTheme(
@@ -33,8 +38,8 @@ class _CustomeSideBarState extends State<CustomeSideBar> {
           borderRadius: BorderRadius.circular(20),
         ),
         hoverColor: Colors.black,
-        textStyle: TextStyle(color: Colors.white.withOpacity(0.7)),
-        selectedTextStyle: const TextStyle(color: Colors.white),
+        textStyle: TextStyle(color: Colors.black.withOpacity(0.7)),
+        selectedTextStyle: const TextStyle(color: Colors.black),
         itemTextPadding: const EdgeInsets.only(left: 30),
         selectedItemTextPadding: const EdgeInsets.only(left: 30),
         itemDecoration: BoxDecoration(
@@ -57,11 +62,11 @@ class _CustomeSideBarState extends State<CustomeSideBar> {
           ],
         ),
         iconTheme: IconThemeData(
-          color: Colors.white.withOpacity(0.7),
+          color: Colors.black.withOpacity(0.7),
           size: 20,
         ),
         selectedIconTheme: const IconThemeData(
-          color: Colors.white,
+          color: Colors.black,
           size: 20,
         ),
       ),
@@ -84,26 +89,33 @@ class _CustomeSideBarState extends State<CustomeSideBar> {
                 width: 70,
                 decoration: const BoxDecoration(
                   shape: BoxShape.rectangle,
-                  color: Colors.transparent,
+                  color: Color.fromARGB(0, 27, 2, 2),
                 ),
                 child: ClipOval(
-                  child: Image.asset(
-                    'assets/images/belkis1.jpg',
-                    fit: BoxFit.cover,
-                    width: 70,
-                    height: 70,
-                  ),
+                  child: currentUser?.photoURL != null
+                      ? Image.network(
+                          currentUser!.photoURL!,
+                          fit: BoxFit.cover,
+                          width: 70,
+                          height: 70,
+                        )
+                      : const Icon(Icons.person,
+                          size: 70, color: Color.fromARGB(255, 0, 0, 0)),
                 ),
               ),
-              const Text(
-                'Admin Name',
+              Text(
+                currentUser?.displayName ?? 'Belkis Market Administrator',
                 style: TextStyle(
-                    color: Colors.white, overflow: TextOverflow.ellipsis),
+                  color: Color.fromARGB(255, 26, 1, 1),
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
-              const Text(
-                'Admin@gmail.com                ',
+              Text(
+                currentUser?.email ?? 'BelkisAdmin@gmail.com',
                 style: TextStyle(
-                    color: Colors.white, overflow: TextOverflow.ellipsis),
+                  color: Color.fromARGB(255, 39, 6, 6),
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             ],
           ),
@@ -133,29 +145,29 @@ class MainScreens extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-        animation: controller,
-        builder: (context, child) {
-          // final pageTitle = _getTitleByIndex(controller.selectedIndex);
-          switch (controller.selectedIndex) {
-            case 0:
-              return HomepageScreen();
-            case 1:
-              return CategoryScreen();
-            case 2:
-              return const ProductView();
-            case 3:
-              return const SellersView();
-            case 4:
-              return const DeliveryMansView();
-            case 5:
-              return const CustomerViewScreen();
-            case 6:
-              return const OrdersScreen();
-            case 7:
-            default:
-              return Container();
-          }
-        });
+      animation: controller,
+      builder: (context, child) {
+        switch (controller.selectedIndex) {
+          case 0:
+            return HomepageScreen();
+          case 1:
+            return CategoryScreen();
+          case 2:
+            return const ProductView();
+          case 3:
+            return const SellersView();
+          case 4:
+            return const DeliveryMansView();
+          case 5:
+            return const CustomerViewScreen();
+          case 6:
+            return const OrdersScreen();
+          case 7:
+          default:
+            return Container();
+        }
+      },
+    );
   }
 }
 
@@ -181,9 +193,11 @@ String getTitleByIndex(int index) {
 }
 
 const primaryColor = Color(0xFF685BFF);
-const canvasColor = Color(0xFF2E2E48);
-const scaffoldBackgroundColor = Color(0xFF464667);
-const accentCanvasColor = Color(0xFF3E3E61);
-const white = Colors.white;
-final actionColor = const Color(0xFF5F5FA7).withOpacity(0.6);
-final divider = Divider(color: white.withOpacity(0.3), height: 1);
+const canvasColor = Color(0xFFEFEFF4); // A light neutral color
+const scaffoldBackgroundColor =
+    Color.fromARGB(255, 209, 198, 198); // White background
+const accentCanvasColor = Color(0xFF42A5F5); // An accent color
+const white = Color(0xFFFFFFFF); // White
+final actionColor = Color(0xFF3F51B5); // A darker shade of primary color
+final divider = Divider(
+    color: Colors.black.withOpacity(0.1), height: 1);  // A subtle divider color

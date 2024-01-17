@@ -21,7 +21,7 @@ class _CustomerViewScreenState extends State<CustomerViewScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 1, vsync: this);
   }
 
   @override
@@ -46,7 +46,7 @@ class _CustomerViewScreenState extends State<CustomerViewScreen>
         ),
         Expanded(
           child: DefaultTabController(
-            length: 3,
+            length: 1,
             child: Scaffold(
               backgroundColor: Colors.white,
               appBar: AppBar(

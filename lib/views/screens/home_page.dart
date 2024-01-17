@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'dart:async';
+import 'package:admin/constants/custom_text.dart';
 import 'package:admin/constants/custome_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -48,46 +49,74 @@ class _HomepageScreenState extends State<HomepageScreen> {
       appBar: AppBar(
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 8),
-            child: CustomButton(
-              width: 120,
-              color: Colors.red.shade300,
-              onPressed: () {
-                setState(() {
-                  markers.clear();
-                  polylines.clear();
-                });
-              },
-              title: ('Clear all'),
+            padding: const EdgeInsets.only(right: 40.0),
+            child: Row(
+              children: [
+                Container(
+                  height: 40,
+                  color: Colors.green,
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 10.0),
+                    child: Row(
+                      children: [
+                        IconButton(
+                            onPressed: () {
+                              _saveDeliveryRange();
+                            },
+                            icon: Icon(
+                              Icons.save,
+                              color: Colors.white,
+                            )),
+                        text(
+                            title: 'Save range', size: 12, color: Colors.white),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(width: 10),
+                Container(
+                  height: 40,
+                  color: Colors.red.shade300,
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 10.0),
+                    child: Row(
+                      children: [
+                        IconButton(
+                            onPressed: () {
+                              setState(() {
+                                markers.clear();
+                                polylines.clear();
+                              });
+                            },
+                            icon: Icon(
+                              Icons.cancel,
+                              color: Colors.white,
+                            )),
+                        text(title: 'Clear', size: 12, color: Colors.white),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ),
-          CustomButton(
-            color: Colors.green.shade200,
-            width: 130,
-            onPressed: _saveDeliveryRange,
-            title: ('Save Range'),
-          ),
+          )
         ],
       ),
       body: Stack(
         children: [
           Padding(
-            padding: const EdgeInsets.all(40.0),
-            child: Container(
-              height: 1000,
-              width: 1000,
-              child: GoogleMap(
-                onMapCreated: (controller) {
-                  _controller.complete(controller);
-                },
-                initialCameraPosition: CameraPosition(
-                  target: LatLng(0.0, 0.0),
-                  zoom: 14.0,
-                ),
-                markers: Set<Marker>.from(markers),
-                polylines: polylines,
-                onTap: _handleTap,
+            padding: const EdgeInsets.only(left: 10.0, right: 20),
+            child: GoogleMap(
+              onMapCreated: (controller) {
+                _controller.complete(controller);
+              },
+              initialCameraPosition: CameraPosition(
+                target: LatLng(0.0, 0.0),
+                zoom: 14.0,
               ),
+              markers: Set<Marker>.from(markers),
+              polylines: polylines,
+              onTap: _handleTap,
             ),
           ),
         ],
@@ -129,9 +158,9 @@ class _HomepageScreenState extends State<HomepageScreen> {
 
     await _firestore.collection('delivery_ranges').add({'points': points});
 
-    // setState(() {
-    //   markers.clear();
-    //   polygonPoints.clear();
-    // });
+    setState(() {
+      markers.clear();
+      polygonPoints.clear();
+    });
   }
 }
